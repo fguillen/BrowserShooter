@@ -12,7 +12,7 @@ class BrowserShooter
             :port     => browser["port"],
             :browser  => browser["browser"],
             :url      => script["url"],
-            :timeout_in_seconds => 20
+            :timeout_in_seconds => 40
           )
 
         client.start_new_browser_session

@@ -1,26 +1,19 @@
 shoots_path: "~/browser_shoots"
 
 scripts:
-  google:
-    name: "google"
-    url: "http://www.google.de"
+  dedicated_bareplayer:
+    name: "dedicated_bareplayer"
+    url: "http://192.168.70.149:3000"
     commands: |
-      open "/"
       window_maximize
-      shot before
-      type "id=lst-ib", "fernando guillen"
-      click "name=btnG"
-      pause 3
-      shot after
-
-
-  miniclip:
-    name: "miniclip"
-    url: "http://www.miniclip.com/games/de/"
-    commands: |
-      open "/"
-      window_maximize
+      window_focus
+      open "/test/widgets/dedicated_bareplayer.html"
+      pause 10
+      focus "id=continue_button"
+      click "id=play-video-link"
+      pause 10
       shot
+      shot_system
 
 browsers:
   windows-firefox:

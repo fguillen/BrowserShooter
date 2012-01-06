@@ -12,6 +12,15 @@ class BrowserShooter
           sufix
         )
 
+      elsif( command.split[0].strip == "shot_system" )
+        sufix = command.split[1] ? command.split[1].strip : nil
+
+        BrowserShooter::Commander.shot_system(
+          client,
+          shoot_path,
+          sufix
+        )
+
       elsif( command.split[0].strip == "pause" )
         BrowserShooter::Commander.pause( command.split[1].strip.to_i )
 
@@ -29,6 +38,17 @@ class BrowserShooter
 
       File.open( path, "wb" ) do |f|
         f.write( Base64.decode64( client.capture_entire_page_screenshot_to_string( "" ) ) )
+      end
+    end
+
+    def self.shot_system( client, path, sufix = nil )
+      sufix = "_#{sufix}" unless sufix.nil?
+      path  = "#{path}#{sufix}_system.png"
+
+      BrowserShooter::Logger.log "shooting system in '#{path}'"
+
+      File.open( "#{path}.screen.png", "wb" ) do |f|
+        f.write( Base64.decode64( client.capture_screenshot_to_string ) )
       end
     end
 

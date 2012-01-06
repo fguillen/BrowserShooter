@@ -32,7 +32,8 @@ Create a YAML file like this:
         name: "google"
         url: "http://www.google.de"
         # commands are Selenium commands
-        # except 'shot' command which receive an optional param with the 'sufix' of the screenshot png
+        # except 'shot' command which receive an optional param with the 'sufix' of the page screenshot png
+        # except 'shot_system' command which receive an optional param with the 'sufix' of the system screenshot png
         # except 'pause' command which use a Ruby 'sleep' command to pause
         commands: |
           open "/"
