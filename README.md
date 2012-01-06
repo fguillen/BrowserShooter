@@ -18,7 +18,7 @@ Repeat this steps in every VM.
 
 Create a YAML file like this:
 
-shoots_path: "/tmp/shoots"  # if not '/' at the begining the path will be relative to the gem folder
+shoots_path: "/tmp/shoots"
 
 scripts:
   google:
@@ -58,7 +58,7 @@ Look in the `examples` folder for more complete examples.
 
 The screenshots will be stored in:
 
-    <shoots_path>/<time_stamp>/*.png
+    <shoots_path>/<time_stamp>/<script_name>_<browser_name>[_<sufix>].png
 
 ## Status
 

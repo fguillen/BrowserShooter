@@ -22,9 +22,6 @@ class BrowserShooter
     end
 
     def self.shot( client, path, sufix = nil )
-      puts "XXX: path: #{path}"
-      puts "XXX: sufix: #{sufix}"
-
       sufix = "_#{sufix}" unless sufix.nil?
       path  = "#{path}#{sufix}.png"
 

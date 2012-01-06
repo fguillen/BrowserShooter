@@ -30,11 +30,7 @@ class BrowserShooter
   end
 
   def set_up_shoots_path( config )
-    if( !config["shoots_path"].match( /^\// ) )
-      config["shoots_path"] = File.expand_path( "#{File.dirname(__FILE__)}/../#{config["shoots_path"]}" )
-    end
-    config["shoots_path"] = "#{config["shoots_path"]}/#{Time.now.strftime("%Y%m%d%H%M%S")}"
-
+    config["shoots_path"] = File.expand_path( "#{config["shoots_path"]}/#{Time.now.strftime("%Y%m%d%H%M%S")}" )
     BrowserShooter::Logger.log( "shoots_path: #{config["shoots_path"]}" )
 
     FileUtils.mkdir_p( config["shoots_path"] )

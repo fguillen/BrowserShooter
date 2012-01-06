@@ -10,7 +10,7 @@ rescue LoadError
   require 'browser_shooter'
 end
 
-if ( ARGV.size < 2 )
+if ( ARGV.size != 1 )
   BrowserShooter::Logger.log "use: $ browser_shooter <config_file_path>"
   exit 1
 end
