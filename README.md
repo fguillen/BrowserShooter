@@ -18,36 +18,37 @@ Repeat this steps in every VM.
 
 Create a YAML file like this:
 
-shoots_path: "/tmp/shoots"
+    # myconfig.yml
+    shoots_path: "/tmp/shoots"
 
-scripts:
-  google:
-    name: "google"
-    url: "http://www.google.de"
-    # commands are Selenium commands
-    # except 'shot' command wich receive an optional param with the 'sufix' of the screenshot png
-    # except 'pause' command wich use a Ruby 'sleep' command to pause
-    commands: |
-      open "/"
-      window_maximize
-      shot before
-      type "id=lst-ib", "fernando guillen"
-      click "name=btnG", wait_for :page
-      pause 3
-      shot after
+    scripts:
+      google:
+        name: "google"
+        url: "http://www.google.de"
+        # commands are Selenium commands
+        # except 'shot' command which receive an optional param with the 'sufix' of the screenshot png
+        # except 'pause' command which use a Ruby 'sleep' command to pause
+        commands: |
+          open "/"
+          window_maximize
+          shot before
+          type "id=lst-ib", "fernando guillen"
+          click "name=btnG", wait_for :page
+          pause 3
+          shot after
 
-browsers:
-  windows-firefox:
-    name: "windows-firefox"
-    host: 10.211.55.4
-    port: 4444
-    browser: "*firefox"
+    browsers:
+      windows-firefox:
+        name: "windows-firefox"
+        host: 10.211.55.4
+        port: 4444
+        browser: "*firefox"
 
-  windows-iexplore:
-    name: "windows-iexploreproxy"
-    host: 10.211.55.4
-    port: 4444
-    browser: "*iexploreproxy"
+      windows-iexplore:
+        name: "windows-iexploreproxy"
+        host: 10.211.55.4
+        port: 4444
+        browser: "*iexploreproxy"
 
 Look in the `examples` folder for more complete examples.
 
