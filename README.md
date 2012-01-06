@@ -1,6 +1,6 @@
 # BrowserShooter
 
-Combined with Selenium RC this gem allows to program Selenium scripts combined with ScreenShots.
+Combined with Selenium RC this gem allows to program Selenium scripts combined with screenshots.
 
 ## Use it
 
@@ -14,7 +14,13 @@ Combined with Selenium RC this gem allows to program Selenium scripts combined w
 
 Repeat this steps in every VM.
 
-### Config your BrowserShooter script
+### Setup the client
+
+#### Install the gem
+
+    gem install "browsers_shooter"
+
+#### Config your BrowserShooter script
 
 Create a YAML file like this:
 
@@ -53,13 +59,13 @@ Create a YAML file like this:
 Look in the `examples` folder for more complete examples.
 
 
-### Run the BrowserShooter script
+#### Run the BrowserShooter script
 
     $ browser_shooter ./my/config.yml
 
 The screenshots will be stored in:
 
-    <shoots_path>/<time_stamp>/<script_name>_<browser_name>[_<sufix>].png
+    /<shoots_path>/<time_stamp>/<script_name>_<browser_name>[_<sufix>].png
 
 ## Status
 
