@@ -1,0 +1,28 @@
+shoots_path: "~/browser_shoots"
+
+scripts:
+  brandengage:
+    name: "brandengage"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      open "/test/brandengage.html"
+      window_maximize
+      click "link=be_1372_dedicated"
+      pause 5
+      get_alert
+      click "link=sp.showVideo();"
+      pause 5
+      shot
+
+browsers:
+  windows-firefox:
+    name: "windows-firefox"
+    host: 10.211.55.4
+    port: 4444
+    browser: "*firefox"
+
+  windows-iexplore:
+    name: "windows-iexploreproxy"
+    host: 10.211.55.4
+    port: 4444
+    browser: "*iexploreproxy"

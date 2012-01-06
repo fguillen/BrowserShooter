@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+# Use:
+#     browser_shooter /path/to/config.yml
+
+begin
+  require 'browser_shooter'
+rescue LoadError
+  require 'rubygems'
+  require 'browser_shooter'
+end
+
+if ( ARGV.size < 2 )
+  BrowserShooter::Logger.log "use: $ browser_shooter <config_file_path>"
+  exit 1
+end
+
+BrowserShooter.new( ARGV[0] ).run

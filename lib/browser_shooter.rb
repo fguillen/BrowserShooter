@@ -15,19 +15,31 @@ class BrowserShooter
   end
 
   def load_config( config_file_path )
-    YAML.load_file( config_file_path )
+    config = YAML.load_file( config_file_path )
+    config = set_up_shoots_path( config )
+
+    config
   end
 
   def run
-    prefix = Time.now.strftime("%Y%m%d%H%M%S")
-    shoots_path = File.expand_path( "#{File.dirname(__FILE__)}/../#{config["shoots_path"]}/#{prefix}/" )
-    FileUtils.mkdir_p( shoots_path )
-
     config["scripts"].each_value do |script|
       config["browsers"].each_value do |browser|
-        BrowserShooter::Driver.run_script_on_browser(script, browser, shoots_path)
+        BrowserShooter::Driver.run_script_on_browser(script, browser, config["shoots_path"])
       end
     end
+  end
+
+  def set_up_shoots_path( config )
+    if( !config["shoots_path"].match( /^\// ) )
+      config["shoots_path"] = File.expand_path( "#{File.dirname(__FILE__)}/../#{config["shoots_path"]}" )
+    end
+    config["shoots_path"] = "#{config["shoots_path"]}/#{Time.now.strftime("%Y%m%d%H%M%S")}"
+
+    BrowserShooter::Logger.log( "shoots_path: #{config["shoots_path"]}" )
+
+    FileUtils.mkdir_p( config["shoots_path"] )
+
+    config
   end
 
 end

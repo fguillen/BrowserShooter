@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = BrowserShooter::VERSION
   s.authors     = ["Fernando Guillen"]
   s.email       = ["fguillen.mail@gmail.com"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.homepage    = "https://github.com/fguillen/BrowserShooter"
+  s.summary     = "Selenium RC wraper to create browser screenshots"
+  s.description = "Selenium RC wraper to create browser screenshots"
 
   s.rubyforge_project = "browser_shooter"
 
