@@ -6,11 +6,18 @@ Combined with Selenium RC this gem allows to program Selenium scripts combined w
 
 ### Setup the servers
 
+#### Starting the Selenium RC server
+
 1. Set up your VirtualMachines with your target SO and browsers installed. Java SE is also needed.
 2. Download the last version of [Selenium Server](http://seleniumhq.org/download/) (AKA Selenium Remote Control).
 3. Go to the console and start the Selenium Server:
 
     java -jar <your selenium server file>.jar
+
+
+#### Pluging for IE screenshots
+
+[Spnapsie](http://snapsie.sourceforge.net/)
 
 Repeat this steps in every VM.
 

@@ -3,14 +3,180 @@ shoots_path: "~/browser_shoots"
 scripts:
   dedicated_bareplayer:
     name: "dedicated_bareplayer"
-    url: "http://192.168.70.149:3000"
+    url: "http://staging.iframe.sponsorpay.com"
     commands: |
       window_maximize
       window_focus
-      open "/test/widgets/dedicated_bareplayer.html"
+      open "/test/widgets/dedicated_bareplayer.html?appid=3249"
       pause 10
-      focus "id=continue_button"
       click "id=play-video-link"
+      pause 10
+      shot
+      shot_system
+
+  dedicated_playerandreward:
+    name: "dedicated_playerandreward"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/widgets/dedicated_playerandreward.html?appid=3249"
+      pause 10
+      click "id=play-video-link"
+      pause 10
+      shot
+      shot_system
+
+  lightbox_bareplayer:
+    name: "lightbox_bareplayer"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/widgets/lightbox_bareplayer.html?appid=3249"
+      pause 10
+      shot
+      shot_system
+
+  lightbox_playerandreward:
+    name: "lightbox_playerandreward"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/widgets/lightbox_playerandreward.html?appid=3249"
+      pause 10
+      shot
+      shot_system
+
+  banner:
+    name: "banner"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/banner.html"
+      pause 10
+      shot
+      shot_system
+
+  banner_iframe:
+    name: "banner_iframe"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/banner_iframe.html"
+      pause 10
+      shot
+      shot_system
+
+  bar:
+    name: "bar"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/bar.html"
+      pause 10
+      shot
+      shot_system
+
+  example_banner_integration:
+    name: "example_banner_integration"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/example_banner_integration.html"
+      pause 10
+      shot
+      shot_system
+
+  example_banner_integration:
+    name: "example_banner_integration"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/example_banner_integration.html"
+      pause 10
+      shot
+      shot_system
+
+  overlay:
+    name: "overlay"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/overlay.html"
+      pause 10
+      shot
+      shot_system
+
+  overlay_right:
+    name: "overlay_right"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/overlay_right.html"
+      pause 10
+      shot
+      shot_system
+
+  video_iframe:
+    name: "video_iframe"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/video_iframe.html"
+      pause 10
+      shot
+      shot_system
+
+  video_iframe:
+    name: "video_iframe"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/video_iframe.html"
+      pause 10
+      shot
+      shot_system
+
+  widget_integration:
+    name: "widget_integration"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/widget_integration.html"
+      pause 10
+      shot
+      shot_system
+
+  widget_integration_iframed:
+    name: "widget_integration_iframed"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/widget_integration_iframed.html"
+      pause 10
+      shot
+      shot_system
+
+  widgets_integration_iframed:
+    name: "widgets_integration_iframed"
+    url: "http://staging.iframe.sponsorpay.com"
+    commands: |
+      window_maximize
+      window_focus
+      open "/test/widgets_integration_iframed.html"
       pause 10
       shot
       shot_system

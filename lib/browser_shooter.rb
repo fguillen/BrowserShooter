@@ -22,11 +22,15 @@ class BrowserShooter
   end
 
   def run
+    BrowserShooter::Logger.log "Starting script running with version #{BrowserShooter::VERSION}..."
+
     config["scripts"].each_value do |script|
       config["browsers"].each_value do |browser|
         BrowserShooter::Driver.run_script_on_browser(script, browser, config["shoots_path"])
       end
     end
+
+    BrowserShooter::Logger.log "... script running ended."
   end
 
   def set_up_shoots_path( config )
