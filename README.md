@@ -77,6 +77,4 @@ The screenshots will be stored in:
 
 ## Status
 
-Still in a _discovery_ state.. no tests.
-
-But is functional a can be usefull in no-production environments.
+Still in a _discovery_ state.. but is already **functional**.
