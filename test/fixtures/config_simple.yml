@@ -1,0 +1,10 @@
+shoots_path: "/shoots-path"
+
+scripts:
+  script-one: "script-one"
+  script-two: "script-two"
+
+browsers:
+  browser-one: "browser-one"
+  browser-two: "browser-two"
+  browser-three: "browser-three"

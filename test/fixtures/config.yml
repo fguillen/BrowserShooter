@@ -7,12 +7,11 @@ scripts:
     commands: |
       open "/"
       window_maximize
-      shot before
+      shot 01_before
       type "id=lst-ib", "fernando guillen"
       click "name=btnG", wait_for :page
       pause 3
-      shot after
-
+      shot 02_after
 
   miniclip:
     name: "miniclip"
@@ -20,19 +19,6 @@ scripts:
     commands: |
       open "/"
       window_maximize
-      shot
-
-  brandengage:
-    name: "brandengage"
-    url: "http://staging.iframe.sponsorpay.com"
-    commands: |
-      open "/test/brandengage.html"
-      window_maximize
-      click "link=be_1372_dedicated"
-      pause 5
-      get_alert
-      click "link=sp.showVideo();"
-      pause 5
       shot
 
 browsers:

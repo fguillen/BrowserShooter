@@ -19,7 +19,7 @@ class BrowserShooter
 
         script["commands"].lines.each do |command|
           BrowserShooter::Commander.execute(
-            command,
+            command.strip,
             client,
             "#{shoots_path}/#{script["name"]}_#{browser["name"]}"
           )
@@ -27,7 +27,6 @@ class BrowserShooter
 
       rescue Exception => e
         BrowserShooter::Logger.log "ERROR: #{e.message}"
-        # puts e.backtrace
 
       ensure
         client.close_current_browser_session if client

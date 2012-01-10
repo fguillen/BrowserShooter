@@ -15,6 +15,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "bundler",   ">= 1.0.0.rc.6"
   s.add_development_dependency "rake",      "0.9.2.2"
+  s.add_development_dependency "mocha"
+
   s.add_dependency "selenium-webdriver"
   s.add_dependency "selenium"
   s.add_dependency "selenium-client"

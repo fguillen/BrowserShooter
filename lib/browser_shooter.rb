@@ -1,4 +1,5 @@
 require_relative "./browser_shooter/version"
+require_relative "./browser_shooter/configurator"
 require_relative "./browser_shooter/logger"
 require_relative "./browser_shooter/driver"
 require_relative "./browser_shooter/commander"
@@ -8,21 +9,16 @@ require "selenium-client"
 require "yaml"
 
 class BrowserShooter
-  attr_reader :config
+  attr_reader :config_file_path
 
   def initialize( config_file_path )
-    @config = load_config( config_file_path )
-  end
-
-  def load_config( config_file_path )
-    config = YAML.load_file( config_file_path )
-    config = set_up_shoots_path( config )
-
-    config
+    @config_file_path = config_file_path
   end
 
   def run
     BrowserShooter::Logger.log "Starting script running with version #{BrowserShooter::VERSION}..."
+
+    config = BrowserShooter::Configurator.load_config( config_file_path )
 
     config["scripts"].each_value do |script|
       config["browsers"].each_value do |browser|
@@ -32,15 +28,5 @@ class BrowserShooter
 
     BrowserShooter::Logger.log "... script running ended."
   end
-
-  def set_up_shoots_path( config )
-    config["shoots_path"] = File.expand_path( "#{config["shoots_path"]}/#{Time.now.strftime("%Y%m%d%H%M%S")}" )
-    BrowserShooter::Logger.log( "shoots_path: #{config["shoots_path"]}" )
-
-    FileUtils.mkdir_p( config["shoots_path"] )
-
-    config
-  end
-
 end
 

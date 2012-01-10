@@ -43,18 +43,18 @@ class BrowserShooter
 
     def self.shot_system( client, path, sufix = nil )
       sufix = "_#{sufix}" unless sufix.nil?
-      path  = "#{path}#{sufix}_system.png"
+      path  = "#{path}#{sufix}.system.png"
 
       BrowserShooter::Logger.log "shooting system in '#{path}'"
 
-      File.open( "#{path}.screen.png", "wb" ) do |f|
+      File.open( path, "wb" ) do |f|
         f.write( Base64.decode64( client.capture_screenshot_to_string ) )
       end
     end
 
     def self.pause( seconds )
       BrowserShooter::Logger.log "pausing #{seconds} seconds"
-      sleep seconds
+      Kernel.sleep seconds
     end
   end
 end
