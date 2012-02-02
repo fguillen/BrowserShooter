@@ -1,0 +1,3 @@
+time | success | command | message
+the time 1 | true | the command 1 | the message 1
+the time 2 | false | the command 2 | the message 2

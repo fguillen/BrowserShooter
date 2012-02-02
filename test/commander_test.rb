@@ -41,6 +41,8 @@ class CommanderTest < Test::Unit::TestCase
   end
 
   def test_shot_without_sufix
+    BrowserShooter::Commander.stubs( :timestamp ).returns( "timestamp" )
+
     in_tmpdir do |tmpdir|
       client = stub( :capture_entire_page_screenshot_to_string => read_fixture( "screenshot.base64" ) )
       path = "#{tmpdir}/myfile"
@@ -49,7 +51,7 @@ class CommanderTest < Test::Unit::TestCase
 
       assert_equal(
        Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
-       Digest::MD5.hexdigest( File.read( "#{path}.png" ) )
+       Digest::MD5.hexdigest( File.read( "#{path}_timestamp.png" ) )
       )
     end
   end
@@ -69,6 +71,8 @@ class CommanderTest < Test::Unit::TestCase
   end
 
   def test_shot_system_without_sufix
+    BrowserShooter::Commander.stubs( :timestamp ).returns( "timestamp" )
+
     in_tmpdir do |tmpdir|
       client = stub( :capture_screenshot_to_string => read_fixture( "screenshot.base64" ) )
       path = "#{tmpdir}/myfile"
@@ -77,7 +81,7 @@ class CommanderTest < Test::Unit::TestCase
 
       assert_equal(
        Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
-       Digest::MD5.hexdigest( File.read( "#{path}.system.png" ) )
+       Digest::MD5.hexdigest( File.read( "#{path}_timestamp.system.png" ) )
       )
     end
   end

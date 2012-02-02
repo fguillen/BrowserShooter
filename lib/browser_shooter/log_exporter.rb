@@ -6,7 +6,7 @@ class BrowserShooter
     end
 
     def self.export_to_json( logs, path )
-      File.open( "#{path}.json", "w" ) do |f|
+      File.open( "#{path}/logs.json", "w" ) do |f|
         f.write JSON.pretty_generate( logs )
       end
     end

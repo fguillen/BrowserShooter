@@ -1,0 +1,24 @@
+{
+  "script1": [
+    {
+      "time": "the time 1",
+      "success": true,
+      "command": "the command 1",
+      "message": "the message 1"
+    },
+    {
+      "time": "the time 2",
+      "success": false,
+      "command": "the command 2",
+      "message": "the message 2"
+    }
+  ],
+  "script2": [
+    {
+      "time": "the time 3",
+      "success": true,
+      "command": "the command 3",
+      "message": "the message 3"
+    }
+  ]
+}

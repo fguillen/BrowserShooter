@@ -61,8 +61,8 @@ class BrowserShooter
     end
 
     def self.shot( client, path, sufix = nil )
-      sufix = "_#{sufix}" unless sufix.nil?
-      path  = "#{path}#{sufix}.png"
+      sufix = timestamp unless sufix
+      path  = "#{path}_#{sufix}.png"
 
       BrowserShooter::Logger.log "shooting in '#{path}'"
 
@@ -73,9 +73,9 @@ class BrowserShooter
       return path
     end
 
-    def self.shot_system( client, path, sufix = nil )
-      sufix = "_#{sufix}" unless sufix.nil?
-      path  = "#{path}#{sufix}.system.png"
+    def self.shot_system( client, path, sufix = timestamp )
+      sufix = timestamp unless sufix
+      path  = "#{path}_#{sufix}.system.png"
 
       BrowserShooter::Logger.log "shooting system in '#{path}'"
 
@@ -91,6 +91,10 @@ class BrowserShooter
       Kernel.sleep seconds
 
       return "#{seconds} later..."
+    end
+
+    def self.timestamp
+      Time.now.to_i
     end
   end
 end
