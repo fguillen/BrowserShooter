@@ -12,7 +12,7 @@ Combined with Selenium RC this gem allows to program Selenium scripts combined w
 2. Download the last version of [Selenium Server](http://seleniumhq.org/download/) (AKA Selenium Remote Control).
 3. Go to the console and start the Selenium Server:
 
-    java -jar <your selenium server file>.jar
+    java -jar &lt;your selenium server file&gt;.jar
 
 
 #### Pluging for IE screenshots
@@ -33,6 +33,7 @@ Create a YAML file like this:
 
     # myconfig.yml
     output_path: "/tmp/shoots"
+    logs_format: "csv"
 
     scripts:
       google:
@@ -64,7 +65,7 @@ Create a YAML file like this:
         port: 4444
         browser: "*iexploreproxy"
 
-Look in the `examples` folder for more complete examples.
+Look in the [examples folder](https://github.com/fguillen/BrowserShooter/tree/master/examples) for more complete examples.
 
 
 #### Run the BrowserShooter script
@@ -73,8 +74,11 @@ Look in the `examples` folder for more complete examples.
 
 The screenshots will be stored in:
 
-    /<output_path>/<time_stamp>/<script_name>_<browser_name>[_<sufix>].png
+    /<output_path>/<time_stamp>/shots/<script_name>_<browser_name>[_<sufix>].png
 
+The logs will be stored in:
+
+    /<output_path>/<time_stamp>/logs/<script_name>_<browser_name>[_<sufix>].png
 ## Status
 
 Still in a _discovery_ state.. but is already **functional**.
