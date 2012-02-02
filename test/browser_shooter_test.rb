@@ -16,6 +16,8 @@ class BrowserScreenshotTest < Test::Unit::TestCase
     BrowserShooter::Driver.expects( :run_script_on_browser).with( "script-two", "browser-two", "/shoots-path" )
     BrowserShooter::Driver.expects( :run_script_on_browser).with( "script-two", "browser-three", "/shoots-path" )
 
+    BrowserShooter::Util.expects( :export_logs_to_csv )
+
     BrowserShooter.new( config_file_path ).run
   end
 end

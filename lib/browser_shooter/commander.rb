@@ -1,6 +1,6 @@
 class BrowserShooter
   module Commander
-    def self.execute( command, client, shoot_path )
+    def self.execute( command, client, output_path )
       BrowserShooter::Logger.log "command: #{command}"
 
       if( command.split[0].strip == "shot" )
@@ -8,7 +8,7 @@ class BrowserShooter
 
         BrowserShooter::Commander.shot(
           client,
-          shoot_path,
+          output_path,
           sufix
         )
 
@@ -17,7 +17,7 @@ class BrowserShooter
 
         BrowserShooter::Commander.shot_system(
           client,
-          shoot_path,
+          output_path,
           sufix
         )
 
@@ -30,6 +30,36 @@ class BrowserShooter
       end
     end
 
+    def self.wrapper_execute( command, client, output_path )
+      result = {
+        :time     => Time.now.to_i,
+        :command  => command
+      }
+
+      begin
+        message =
+          BrowserShooter::Commander.execute(
+            command,
+            client,
+            output_path
+          )
+
+        result.merge!(
+          :success => true,
+          :message => message
+        )
+
+      rescue Exception => e
+        result.merge!(
+          :success  => false,
+          :message  => e.message
+        )
+
+      end
+
+      return result
+    end
+
     def self.shot( client, path, sufix = nil )
       sufix = "_#{sufix}" unless sufix.nil?
       path  = "#{path}#{sufix}.png"
@@ -39,6 +69,8 @@ class BrowserShooter
       File.open( path, "wb" ) do |f|
         f.write( Base64.decode64( client.capture_entire_page_screenshot_to_string( "" ) ) )
       end
+
+      return path
     end
 
     def self.shot_system( client, path, sufix = nil )
@@ -50,11 +82,15 @@ class BrowserShooter
       File.open( path, "wb" ) do |f|
         f.write( Base64.decode64( client.capture_screenshot_to_string ) )
       end
+
+      return path
     end
 
     def self.pause( seconds )
       BrowserShooter::Logger.log "pausing #{seconds} seconds"
       Kernel.sleep seconds
+
+      return "#{seconds} later..."
     end
   end
 end
