@@ -1,4 +1,4 @@
-shoots_path: "/tmp/shoots"
+output_path: "/tmp/output"
 
 scripts:
   google:

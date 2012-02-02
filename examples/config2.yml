@@ -1,4 +1,4 @@
-shoots_path: "~/browser_shoots"
+output_path: "~/browser_shoots"
 
 scripts:
   brandengage:

@@ -1,11 +1,11 @@
 class BrowserShooter
   module Driver
-    def self.run_script_on_browser(script, browser, shoots_path)
-      BrowserShooter::Logger.log "Runing script '#{script["name"]}' with url '#{script["url"]}' in browser '#{browser["name"]}'"
-
+    def self.run_script_on_browser(script, browser, shots_path)
       client = nil
 
       begin
+        BrowserShooter::Logger.log "Runing script '#{script["name"]}' with url '#{script["url"]}' in browser '#{browser["name"]}'"
+
         client =
           Selenium::Client::Driver.new(
             :host     => browser["host"],
@@ -17,16 +17,16 @@ class BrowserShooter
 
         client.start_new_browser_session
 
-        script["commands"].lines.each do |command|
-          BrowserShooter::Commander.execute(
-            command.strip,
-            client,
-            "#{shoots_path}/#{script["name"]}_#{browser["name"]}"
-          )
-        end
+        logs =
+          script["commands"].lines.map do |command|
+            BrowserShooter::Commander.wrapper_execute(
+              command.strip,
+              client,
+              "#{shots_path}/#{script["name"]}_#{browser["name"]}"
+            )
+          end
 
-      rescue Exception => e
-        BrowserShooter::Logger.log "ERROR: #{e.message}"
+        logs
 
       ensure
         client.close_current_browser_session if client

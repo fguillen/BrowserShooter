@@ -1,4 +1,5 @@
-shoots_path: "/shoots-path"
+output_path: "/output_path"
+logs_format: "csv"
 
 scripts:
   script-one: "script-one"
