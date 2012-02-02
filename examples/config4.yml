@@ -3,7 +3,7 @@ output_path: "~/browser_shooter"
 scripts:
   lightbox:
     name: "lightbox"
-    url: "http://localhost:3000"
+    url: "http://192.168.70.52:3000"
     commands: |
       open "/test/browser_shooter/lightbox_bareplayer.html"
       window_maximize
@@ -21,6 +21,12 @@ scripts:
       pause 8
       shot_system
       alert
+      select_frame "relative=up"
+      click "id=sp_close_x"
+      alert
+      wait_for_condition "selenium.browserbot.getCurrentWindow().document.getElementById('sp_lightbox').style.display == 'none'", 10000
+      shot_system
+
 
 browsers:
   osx-firefox:

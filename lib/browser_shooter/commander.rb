@@ -50,6 +50,8 @@ class BrowserShooter
         )
 
       rescue Exception => e
+        BrowserShooter::Logger.log "ERROR: #{e.message}"
+
         result.merge!(
           :success  => false,
           :message  => e.message
@@ -90,7 +92,7 @@ class BrowserShooter
       BrowserShooter::Logger.log "pausing #{seconds} seconds"
       Kernel.sleep seconds
 
-      return "#{seconds} later..."
+      return "#{seconds} seconds later..."
     end
 
     def self.timestamp
