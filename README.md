@@ -25,7 +25,7 @@ Repeat this steps in every VM.
 
 #### Install the gem
 
-    gem install "browsers_shooter"
+    gem install "browser_shooter"
 
 #### Config your BrowserShooter script
 
@@ -74,11 +74,12 @@ Look in the [examples folder](https://github.com/fguillen/BrowserShooter/tree/ma
 
 The screenshots will be stored in:
 
-    /<output_path>/<time_stamp>/shots/<script_name>_<browser_name>[_<sufix>].png
+    /<output_path>/<time_stamp>/shots
 
 The logs will be stored in:
 
-    /<output_path>/<time_stamp>/logs/<script_name>_<browser_name>[_<sufix>].png
+    /<output_path>/<time_stamp>/logs
+
 ## Status
 
 Still in a _discovery_ state.. but is already **functional**.
