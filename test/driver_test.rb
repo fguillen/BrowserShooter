@@ -5,8 +5,7 @@ class DriverTest < Test::Unit::TestCase
   def test_run_script_on_browser
     browser = {
       "name"    => "browser-name",
-      "host"    => "browser-host",
-      "port"    => "browser-port",
+      "url"     => "url",
       "browser" => "browser-browser"
     }
 
@@ -17,18 +16,14 @@ class DriverTest < Test::Unit::TestCase
     }
 
     expected_opts = {
-      :host     => "browser-host",
-      :port     => "browser-port",
-      :browser  => "browser-browser",
-      :url      => "script-url",
-      :timeout_in_seconds => 40
+      :url                    => "url",
+      :desired_capabilities   => "browser-browser".to_sym
     }
 
-    client = Object.new
-    client.expects( :start_new_browser_session )
-    client.expects( :close_current_browser_session )
+    client = mock()
+    client.expects( :quit )
 
-    Selenium::Client::Driver.expects( :new ).with( expected_opts ).returns( client )
+    Selenium::WebDriver.expects( :for ).with( :remote, expected_opts ).returns( client )
 
     BrowserShooter::Commander.expects( :execute ).with( "one", client, "shoots-path/script-name_browser-name")
     BrowserShooter::Commander.expects( :execute ).with( "two", client, "shoots-path/script-name_browser-name")

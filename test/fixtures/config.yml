@@ -3,10 +3,8 @@ output_path: "/tmp/output"
 scripts:
   google:
     name: "google"
-    url: "http://www.google.de"
     commands: |
-      open "/"
-      window_maximize
+      navigate.to "http://www.google.de"
       shot 01_before
       type "id=lst-ib", "fernando guillen"
       click "name=btnG", wait_for :page
@@ -15,27 +13,22 @@ scripts:
 
   miniclip:
     name: "miniclip"
-    url: "http://www.miniclip.com/games/de/"
     commands: |
-      open "/"
-      window_maximize
+      navigate.to "http://www.miniclip.com/games/de/"
       shot
 
 browsers:
   windows-firefox:
     name: "windows-firefox"
-    host: 10.211.55.4
-    port: 4444
-    browser: "*firefox"
+    url: "http://10.211.55.4:4444/wd/hub"
+    browser: "firefox"
 
   windows-iexplore:
     name: "windows-iexploreproxy"
-    host: 10.211.55.4
-    port: 4444
-    browser: "*iexploreproxy"
+    url: "http://10.211.55.4:4444/wd/hub"
+    browser: "iexploreproxy"
 
   linux-firefox:
     name: "linux-firefox"
-    host: 10.211.55.5
-    port: 4444
-    browser: "*firefox"
+    url: "http://10.211.55.4:4444/wd/hub"
+    browser: "firefox"

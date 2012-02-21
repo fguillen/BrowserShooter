@@ -3,34 +3,29 @@ output_path: "~/browser_shoots"
 scripts:
   google:
     name: "google"
-    url: "http://www.google.de"
     commands: |
-      open "/"
-      window_maximize
+      navigate.to "http://www.google.de"
       shot before
-      type "id=lst-ib", "fernando guillen"
-      click "name=btnG"
+      type "input[name='q']", "beautiful houses"
+      click "input[name='btnG']"
+      pause 3
+      click "a.kls"
       pause 3
       shot after
 
-
   miniclip:
     name: "miniclip"
-    url: "http://www.miniclip.com/games/de/"
     commands: |
-      open "/"
-      window_maximize
+      navigate.to "http://www.miniclip.com/games/de/"
       shot
 
 browsers:
-  windows-firefox:
-    name: "windows-firefox"
-    host: 10.211.55.4
-    port: 4444
-    browser: "*firefox"
+  ios-firefox:
+    name: "ios-firefox"
+    url: "http://127.0.0.1:4444/wd/hub"
+    browser: "firefox"
 
-  windows-iexplore:
-    name: "windows-iexploreproxy"
-    host: 10.211.55.4
-    port: 4444
-    browser: "*iexploreproxy"
+  ios-chrome:
+    name: "ios-chrome"
+    url: "http://127.0.0.1:4444/wd/hub"
+    browser: "chrome"

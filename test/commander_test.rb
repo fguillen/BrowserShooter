@@ -21,22 +21,34 @@ class CommanderTest < Test::Unit::TestCase
     BrowserShooter::Commander.execute( "shot_system", "client", "shoot-path" )
   end
 
-  def test_execute_when_shot_pause
+  def test_execute_when_pause
     BrowserShooter::Commander.expects( :pause ).with( 10 )
     BrowserShooter::Commander.execute( "pause 10", "client", "shoot-path" )
   end
 
+  def test_execute_when_wait_for_element
+    BrowserShooter::Commander.expects( :wait_for_element ).with( "client", "css_selector", 10 )
+    BrowserShooter::Commander.execute( "wait_for_element \"css_selector\", 10", "client", nil )
+  end
+
+  def test_execute_when_click
+    BrowserShooter::Commander.expects( :click ).with( "client", "css_selector" )
+    BrowserShooter::Commander.execute( "click \"css_selector\"", "client", nil )
+  end
+
+  def test_execute_when_type
+    BrowserShooter::Commander.expects( :type ).with( "client", "css_selector", "message a b" )
+    BrowserShooter::Commander.execute( "type \"css_selector\", \"message a b\"", "client", nil )
+  end
+
   def test_shot_with_sufix
     in_tmpdir do |tmpdir|
-      client = stub( :capture_entire_page_screenshot_to_string => read_fixture( "screenshot.base64" ) )
+      client = mock()
       path = "#{tmpdir}/myfile"
 
-      BrowserShooter::Commander.shot( client, path, "sufix" )
+      client.expects( :save_screenshot ).with( "#{path}_sufix.png" )
 
-      assert_equal(
-       Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
-       Digest::MD5.hexdigest( File.read( "#{path}_sufix.png" ) )
-      )
+      BrowserShooter::Commander.shot( client, path, "sufix" )
     end
   end
 
@@ -44,46 +56,75 @@ class CommanderTest < Test::Unit::TestCase
     BrowserShooter::Commander.stubs( :timestamp ).returns( "timestamp" )
 
     in_tmpdir do |tmpdir|
-      client = stub( :capture_entire_page_screenshot_to_string => read_fixture( "screenshot.base64" ) )
+      client = mock()
       path = "#{tmpdir}/myfile"
+
+      client.expects( :save_screenshot ).with( "#{path}_timestamp.png" )
 
       BrowserShooter::Commander.shot( client, path, nil )
-
-      assert_equal(
-       Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
-       Digest::MD5.hexdigest( File.read( "#{path}_timestamp.png" ) )
-      )
     end
   end
 
-  def test_shot_system_with_sufix
-    in_tmpdir do |tmpdir|
-      client = stub( :capture_screenshot_to_string => read_fixture( "screenshot.base64" ) )
-      path = "#{tmpdir}/myfile"
+  # FIXME: shot_system not supported in WebDriver
+  # def test_shot_system_with_sufix
+  #   in_tmpdir do |tmpdir|
+  #     client = stub( :capture_screenshot_to_string => read_fixture( "screenshot.base64" ) )
+  #     path = "#{tmpdir}/myfile"
 
-      BrowserShooter::Commander.shot_system( client, path, "sufix" )
+  #     BrowserShooter::Commander.shot_system( client, path, "sufix" )
 
-      assert_equal(
-       Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
-       Digest::MD5.hexdigest( File.read( "#{path}_sufix.system.png" ) )
-      )
-    end
+  #     assert_equal(
+  #      Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
+  #      Digest::MD5.hexdigest( File.read( "#{path}_sufix.system.png" ) )
+  #     )
+  #   end
+  # end
+
+  # def test_shot_system_without_sufix
+  #   BrowserShooter::Commander.stubs( :timestamp ).returns( "timestamp" )
+
+  #   in_tmpdir do |tmpdir|
+  #     client = stub( :capture_screenshot_to_string => read_fixture( "screenshot.base64" ) )
+  #     path = "#{tmpdir}/myfile"
+
+  #     BrowserShooter::Commander.shot_system( client, path, nil )
+
+  #     assert_equal(
+  #      Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
+  #      Digest::MD5.hexdigest( File.read( "#{path}_timestamp.system.png" ) )
+  #     )
+  #   end
+  # end
+
+  def test_wait_for_element
+    wait    = mock()
+    client  = mock()
+
+    Selenium::WebDriver::Wait.expects( :new ).with( :timeout => 10 ).returns( wait )
+    wait.expects( :until ).yields
+    client.expects( :find_element ).with( "css", "css_selector" )
+
+    BrowserShooter::Commander.wait_for_element( client, "css_selector", 10 )
   end
 
-  def test_shot_system_without_sufix
-    BrowserShooter::Commander.stubs( :timestamp ).returns( "timestamp" )
+  def test_click
+    client  = mock()
+    element = mock()
 
-    in_tmpdir do |tmpdir|
-      client = stub( :capture_screenshot_to_string => read_fixture( "screenshot.base64" ) )
-      path = "#{tmpdir}/myfile"
+    client.expects( :find_element ).with( "css", "css_selector" ).returns( element )
+    element.expects( :click )
 
-      BrowserShooter::Commander.shot_system( client, path, nil )
+    BrowserShooter::Commander.click( client, "css_selector" )
+  end
 
-      assert_equal(
-       Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
-       Digest::MD5.hexdigest( File.read( "#{path}_timestamp.system.png" ) )
-      )
-    end
+  def test_type
+    client  = mock()
+    element = mock()
+
+    client.expects( :find_element ).with( "css", "css_selector" ).returns( element )
+    element.expects( :send_keys ).with( "message" )
+
+    BrowserShooter::Commander.type( client, "css_selector", "message" )
   end
 
   def test_pause

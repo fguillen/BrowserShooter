@@ -19,7 +19,12 @@ Combined with Selenium RC this gem allows to program Selenium scripts combined w
 
 [Spnapsie](http://snapsie.sourceforge.net/)
 
-Repeat this steps in every VM.
+
+#### Chrome WebDriver
+
+In the servers that are gonna execute Chrome you have to install the [ChromeDriver](http://code.google.com/p/selenium/wiki/ChromeDriver).
+
+Repeat these steps in every VM.
 
 ### Setup the client
 
@@ -38,31 +43,31 @@ Create a YAML file like this:
     scripts:
       google:
         name: "google"
-        url: "http://www.google.de"
-        # commands are Selenium commands
+        # commands are WebDriver commands
         # except 'shot' command which receive an optional param with the 'sufix' of the page screenshot png
-        # except 'shot_system' command which receive an optional param with the 'sufix' of the system screenshot png
         # except 'pause' command which use a Ruby 'sleep' command to pause
+        # except 'click' command whith receive a 'css_selector' as a param, find the element and click on it
+        # except 'type' command whith receive two params: 'css_selector' ana a 'message', find the element and type the message on it
+        # except 'wait_for_element' command whith receive two params: 'css_selector', and a 'timeout' in seconds
         commands: |
-          open "/"
-          window_maximize
+          navigate.to "http://www.google.de"
           shot before
-          type "id=lst-ib", "fernando guillen"
-          click "name=btnG", wait_for :page
+          type "input[name='q']", "beautiful houses"
+          click "input[name='btnG']"
+          pause 3
+          click "a.kls"
           pause 3
           shot after
 
     browsers:
       windows-firefox:
         name: "windows-firefox"
-        host: 10.211.55.4
-        port: 4444
-        browser: "*firefox"
+        url: "http://127.0.0.1:4444/wd/hub"
+        browser: "firefox"
 
       windows-iexplore:
         name: "windows-iexploreproxy"
-        host: 10.211.55.4
-        port: 4444
+        url: "http://127.0.0.1:4444/wd/hub"
         browser: "*iexploreproxy"
 
 Look in the [examples folder](https://github.com/fguillen/BrowserShooter/tree/master/examples) for more complete examples.

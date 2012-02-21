@@ -4,18 +4,14 @@ class BrowserShooter
       client = nil
 
       begin
-        BrowserShooter::Logger.log "Runing script '#{script["name"]}' with url '#{script["url"]}' in browser '#{browser["name"]}'"
+        BrowserShooter::Logger.log "Runing script '#{script["name"]}' in browser '#{browser["name"]}'"
 
         client =
-          Selenium::Client::Driver.new(
-            :host     => browser["host"],
-            :port     => browser["port"],
-            :browser  => browser["browser"],
-            :url      => script["url"],
-            :timeout_in_seconds => 40
+          Selenium::WebDriver.for(
+            :remote,
+            :url => browser["url"],
+            :desired_capabilities => browser["browser"].to_sym
           )
-
-        client.start_new_browser_session
 
         logs =
           script["commands"].lines.map do |command|
@@ -29,7 +25,7 @@ class BrowserShooter
         logs
 
       ensure
-        client.close_current_browser_session if client
+        client.quit if client
 
       end
     end
