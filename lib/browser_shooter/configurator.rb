@@ -1,4 +1,7 @@
 module BrowserShooter::Configurator
+  def self.execution_tree
+  end
+
   def self.load_config( config_file_path )
     config = {
       "output_path" => "~/browser_shooter",

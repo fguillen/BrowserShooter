@@ -3,6 +3,9 @@ require "mixlib/cli"
 require "yaml"
 require "json"
 
+require_relative "./browser_shooter/models/suite"
+require_relative "./browser_shooter/models/test"
+require_relative "./browser_shooter/models/browser"
 require_relative "./browser_shooter/version"
 require_relative "./browser_shooter/configurator"
 require_relative "./browser_shooter/logger"
@@ -11,17 +14,19 @@ require_relative "./browser_shooter/commander"
 require_relative "./browser_shooter/log_exporter"
 require_relative "./browser_shooter/argv_parser"
 
-class BrowserShooter
-  attr_reader :config_file_path
 
-  def initialize( config_file_path )
-    @config_file_path = config_file_path
+class BrowserShooter
+  attr_reader :opts
+
+  def initialize( opts )
+    @opts = opts
   end
 
   def run
     BrowserShooter::Logger.log "Starting script running with version #{BrowserShooter::VERSION}..."
 
     config  = BrowserShooter::Configurator.load_config( config_file_path )
+    execution
     logs    = {}
 
     config["scripts"].each_value do |script|
