@@ -1,14 +1,15 @@
+require "selenium-webdriver"
+require "mixlib/cli"
+require "yaml"
+require "json"
+
 require_relative "./browser_shooter/version"
 require_relative "./browser_shooter/configurator"
 require_relative "./browser_shooter/logger"
 require_relative "./browser_shooter/driver"
 require_relative "./browser_shooter/commander"
 require_relative "./browser_shooter/log_exporter"
-
-require "selenium-webdriver"
-require "selenium-client"
-require "yaml"
-require "json"
+require_relative "./browser_shooter/argv_parser"
 
 class BrowserShooter
   attr_reader :config_file_path

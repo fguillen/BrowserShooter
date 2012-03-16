@@ -5,6 +5,9 @@ scripts:
   script-one: "script-one"
   script-two: "script-two"
 
+suites:
+  suite-one: "suite-one"
+
 browsers:
   browser-one: "browser-one"
   browser-two: "browser-two"

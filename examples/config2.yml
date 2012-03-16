@@ -4,7 +4,7 @@ scripts:
   lightbox:
     name: "lightbox"
     commands: |
-      navigate.to "http://192.168.70.76:3000/test/browser_shooter/lightbox_bareplayer.html"
+      navigate.to "http://192.168.70.70/test/browser_shooter/lightbox_bareplayer.html"
       shot 01_first
       pause 5
       switch_to.alert.accept
@@ -28,7 +28,22 @@ scripts:
       shot 06_hidden
 
 browsers:
-  osx-chrome:
-    name: "osx-chrome"
-    url: "http://127.0.0.1:4444/wd/hub"
-    browser: "chrome"
+  # osx-chrome:
+  #   name: "osx-chrome"
+  #   url: "http://127.0.0.1:4444/wd/hub"
+  #   browser: "chrome"
+
+  # windows-chrome:
+  #   name: "windows-chrome"
+  #   url: "http://10.211.55.4:4444/wd/hub"
+  #   browser: "chrome"
+
+  # windows-firefox:
+  #   name: "windows-firefox"
+  #   url: "http://10.211.55.4:4444/wd/hub"
+  #   browser: "firefox"
+
+  windows-ie:
+    name: "windows-ie"
+    url: "http://10.211.55.4:4444/wd/hub"
+    browser: "ie"

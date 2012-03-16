@@ -18,8 +18,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "mocha"
 
   s.add_dependency "selenium-webdriver"
-  s.add_dependency "selenium"
-  s.add_dependency "selenium-client"
+  s.add_dependency "mixlib-cli"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
