@@ -9,6 +9,6 @@ class ARGVParserTest < Test::Unit::TestCase
     assert_equal( "my/file/path.yml", argv_parser.config[:config_file] )
     assert_equal( "my_suite", argv_parser.config[:suite] )
     assert_equal( "my_test", argv_parser.config[:test] )
-    assert_equal( [:browser1, :browser2], argv_parser.config[:browsers] )
+    assert_equal( ["browser1", "browser2"], argv_parser.config[:browsers] )
   end
 end

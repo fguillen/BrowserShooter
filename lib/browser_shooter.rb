@@ -25,16 +25,30 @@ class BrowserShooter
   def run
     BrowserShooter::Logger.log "Starting script running with version #{BrowserShooter::VERSION}..."
 
-    config  = BrowserShooter::Configurator.load_config( config_file_path )
-    execution
-    logs    = {}
+    config = BrowserShooter::Configurator.new( opts )
+    suites = config.suites
 
-    config["scripts"].each_value do |script|
-      config["browsers"].each_value do |browser|
-        logs["#{script["name"]}_#{browser["name"]}"] =
-          BrowserShooter::Driver.run_script_on_browser(script, browser, "#{config["output_path"]}/shots")
+    logs   = {}
+
+    suites.each do |suite|
+      logs[suite.name] ||= {}
+
+      suite.tests.each do |test|
+        logs[suite.name][test.name] ||= {}
+
+        suite.browsers.each do |browser|
+          output_path = "#{config["output_path"]}/#{suite.name}/#{test.name}/#{browser.name}"
+
+          logs[suite.name][test.name][browser.name] =
+            BrowserShooter::Driver.run_script_on_browser(
+              test.commands,
+              browser,
+              output_path
+            )
+        end
       end
     end
+
 
     BrowserShooter::LogExporter.export( logs, "#{config["output_path"]}/logs", config["logs_format"] )
 

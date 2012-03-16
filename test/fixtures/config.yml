@@ -1,34 +1,43 @@
 output_path: "/tmp/output"
 
-scripts:
-  google:
-    name: "google"
-    commands: |
-      navigate.to "http://www.google.de"
-      shot 01_before
-      type "id=lst-ib", "fernando guillen"
-      click "name=btnG", wait_for :page
-      pause 3
-      shot 02_after
+tests:
+  google: |
+    navigate.to "http://www.google.de"
+    shot 01_before
+    type "id=lst-ib", "fernando guillen"
+    click "name=btnG", wait_for :page
+    pause 3
+    shot 02_after
 
-  miniclip:
-    name: "miniclip"
-    commands: |
-      navigate.to "http://www.miniclip.com/games/de/"
-      shot
+  miniclip: |
+    navigate.to "http://www.miniclip.com/games/de/"
+    shot
 
 browsers:
   windows-firefox:
-    name: "windows-firefox"
     url: "http://10.211.55.4:4444/wd/hub"
-    browser: "firefox"
+    type: "firefox"
 
   windows-iexplore:
-    name: "windows-iexploreproxy"
     url: "http://10.211.55.4:4444/wd/hub"
-    browser: "iexploreproxy"
+    type: "iexploreproxy"
 
   linux-firefox:
-    name: "linux-firefox"
     url: "http://10.211.55.4:4444/wd/hub"
-    browser: "firefox"
+    type: "firefox"
+
+suites:
+  suite1:
+    tests:
+     - google
+     - miniclip
+    browsers:
+     - windows-firefox
+     - windows-iexplore
+
+  suite2:
+    tests:
+     - miniclip
+    browsers:
+     - windows-firefox
+     - linux-firefox

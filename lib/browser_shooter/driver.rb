@@ -1,24 +1,24 @@
 class BrowserShooter
   module Driver
-    def self.run_script_on_browser(script, browser, shots_path)
+    def self.run_script_on_browser(commands, browser, output_path)
       client = nil
 
       begin
-        BrowserShooter::Logger.log "Runing script '#{script["name"]}' in browser '#{browser["name"]}'"
+        BrowserShooter::Logger.log "Runing commands in browser '#{browser["name"]}'"
 
         client =
           Selenium::WebDriver.for(
             :remote,
-            :url => browser["url"],
-            :desired_capabilities => browser["browser"].to_sym
+            :url => browser.url,
+            :desired_capabilities => browser.type.to_sym
           )
 
         logs =
-          script["commands"].lines.map do |command|
+          commands.map do |command|
             BrowserShooter::Commander.wrapper_execute(
               command.strip,
               client,
-              "#{shots_path}/#{script["name"]}_#{browser["name"]}"
+              output_path
             )
           end
 

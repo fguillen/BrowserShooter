@@ -28,7 +28,7 @@ class BrowserShooter::ARGVParsers
     :short        => "-b BROWSERS",
     :long         => "--browsers BROWSERS",
     :description  => "The name of the browsers to execute, separated by comas",
-    :proc         => Proc.new { |browsers| browsers.split(",").map(&:to_sym) }
+    :proc         => Proc.new { |browsers| browsers.split(",") }
   )
 
   option(

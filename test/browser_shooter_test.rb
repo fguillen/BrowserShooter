@@ -2,22 +2,33 @@ require_relative "test_helper"
 
 class BrowserScreenshotTest < Test::Unit::TestCase
   def test_initialize
-    assert_equal( "filepath", BrowserShooter.new( "filepath" ).config_file_path )
+    assert_equal( "opts", BrowserShooter.new( "opts" ).opts )
   end
 
   def test_run
-    config_file_path = "#{FIXTURES}/config_simple.yml"
-    BrowserShooter::Configurator.expects( :load_config ).with( config_file_path ).returns( YAML.load_file( config_file_path ) )
+    BrowserShooter::Configurator.stubs( :set_up_output_path )
 
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( "script-one", "browser-one", "/output_path/shots" )
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( "script-one", "browser-two", "/output_path/shots" )
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( "script-one", "browser-three", "/output_path/shots" )
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( "script-two", "browser-one", "/output_path/shots" )
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( "script-two", "browser-two", "/output_path/shots" )
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( "script-two", "browser-three", "/output_path/shots" )
+    opts = { :config_file => "#{FIXTURES}/config_simple.yml" }
 
-    BrowserShooter::LogExporter.expects( :export_to_csv )
+    test1     = BrowserShooter::Models::Test.new( "test1", ["command1", "command2"] )
+    test2     = BrowserShooter::Models::Test.new( "test2", ["command3"] )
+    browser1  = BrowserShooter::Models::Browser.new( "browser1", "url1", "type1" )
+    browser2  = BrowserShooter::Models::Browser.new( "browser2", "url2", "type2" )
+    suite1    = BrowserShooter::Models::Suite.new( "suite1", [test1, test2], [browser1, browser2] )
 
-    BrowserShooter.new( config_file_path ).run
+    config_mock = mock()
+    BrowserShooter::Configurator.expects( :new ).with( opts ).returns( config_mock )
+
+    config_mock.stubs( :[] ).returns( "config_value" )
+    config_mock.expects( :suites ).returns( [suite1] )
+
+    BrowserShooter::Driver.expects( :run_script_on_browser ).with( test1.commands, browser1, "config_value/suite1/test1/browser1" ).returns( "log1" )
+    BrowserShooter::Driver.expects( :run_script_on_browser ).with( test1.commands, browser2, "config_value/suite1/test1/browser2" ).returns( "log2" )
+    BrowserShooter::Driver.expects( :run_script_on_browser ).with( test2.commands, browser1, "config_value/suite1/test2/browser1" ).returns( "log3" )
+    BrowserShooter::Driver.expects( :run_script_on_browser ).with( test2.commands, browser2, "config_value/suite1/test2/browser2" ).returns( "log4" )
+
+    BrowserShooter::LogExporter.expects( :export )
+
+    BrowserShooter.new( opts ).run
   end
 end
