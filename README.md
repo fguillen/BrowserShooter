@@ -26,7 +26,7 @@ In the servers that are gonna execute Chrome you have to install the [ChromeDriv
 
 Repeat these steps in every VM.
 
-### Setup the client
+### Setup the driver
 
 #### Install the gem
 

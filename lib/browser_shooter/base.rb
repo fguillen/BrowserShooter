@@ -16,19 +16,11 @@ module BrowserShooter
       suites.each do |suite|
         suite.tests.each do |test|
           suite.browsers.each do |browser|
-            output_path = "#{config["output_path"]}/#{suite.name}/#{test.name}/#{browser.name}"
-
-            logs =
-              BrowserShooter::Driver.run_script(
-                test.commands,
-                browser,
-                output_path
-              )
-
-            BrowserShooter::LogExporter.export(
-              logs,
-              "#{output_path}/logs",
-              config["logs_format"]
+            BrowserShooter::Base.run_test(
+              suite,
+              test,
+              browser,
+              config["output_path"]
             )
           end
         end
@@ -36,6 +28,37 @@ module BrowserShooter
 
       BrowserShooter::Logger.log "... script running ended."
       BrowserShooter::Logger.log "BYE!"
+    end
+
+    def self.run_test( suite, test, browser, output_path )
+      BrowserShooter::Logger.log( "Executing #{suite.name} | #{test.name} | #{browser.name}", true )
+      output_path = "#{output_path}/#{suite.name}/#{test.name}/#{browser.name}"
+
+      driver = nil
+
+      begin
+        driver =
+          Selenium::WebDriver.for(
+            :remote,
+            :url => browser.url,
+            :desired_capabilities => browser.type.to_sym
+          )
+
+        logs =
+          BrowserShooter::Commander.script(
+            test.commands,
+            driver,
+            output_path
+          )
+
+        BrowserShooter::LogExporter.export(
+          logs,
+          "#{output_path}/logs"
+        )
+
+      ensure
+        driver.quit if driver
+      end
     end
   end
 end

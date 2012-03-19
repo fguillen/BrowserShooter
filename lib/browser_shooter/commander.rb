@@ -1,12 +1,23 @@
 module BrowserShooter::Commander
-  def self.execute( command, client, output_path )
+
+  def self.script( commands, driver, output_path )
+    commands.map do |command|
+      BrowserShooter::Commander.wrapper_execute(
+        command.strip,
+        driver,
+        output_path
+      )
+    end
+  end
+
+  def self.execute( command, driver, output_path )
     BrowserShooter::Logger.log "command: #{command}"
 
     if( command.split[0].strip == "shot" )
       sufix = command.split[1] ? command.split[1].strip : nil
 
       BrowserShooter::Commander.shot(
-        client,
+        driver,
         output_path,
         sufix
       )
@@ -18,7 +29,7 @@ module BrowserShooter::Commander
       params = command.match /wait_for_element "(.*)"\s?,\s?(\d*)/
 
       BrowserShooter::Commander.wait_for_element(
-        client,
+        driver,
         params[1],
         params[2].to_i
       )
@@ -27,7 +38,7 @@ module BrowserShooter::Commander
       params = command.match /type "(.*)"\s?,\s?"(.*)"/
 
       BrowserShooter::Commander.type(
-        client,
+        driver,
         params[1],
         params[2]
       )
@@ -35,17 +46,17 @@ module BrowserShooter::Commander
     elsif( command.split[0].strip == "click" )
       params = command.match /click "(.*)"/
       BrowserShooter::Commander.click(
-        client,
+        driver,
         params[1]
       )
 
     else
-      eval "client.#{command}"
+      eval "driver.#{command}"
 
     end
   end
 
-  def self.wrapper_execute( command, client, output_path )
+  def self.wrapper_execute( command, driver, output_path )
     result = {
       :time     => Time.now.to_i,
       :command  => command
@@ -55,9 +66,10 @@ module BrowserShooter::Commander
       message =
         BrowserShooter::Commander.execute(
           command,
-          client,
+          driver,
           output_path
         )
+
 
       result.merge!(
         :success => true,
@@ -80,32 +92,32 @@ module BrowserShooter::Commander
     return result
   end
 
-  def self.shot( client, output_path, sufix = nil )
+  def self.shot( driver, output_path, sufix = nil )
     sufix     = timestamp unless sufix
     shot_path = "#{output_path}/shots/#{sufix}.png"
 
     BrowserShooter::Logger.log "shooting in '#{shot_path}'"
 
     FileUtils.mkdir_p( File.dirname( shot_path ) )
-    client.save_screenshot( shot_path )
+    driver.save_screenshot( shot_path )
 
     return shot_path
   end
 
-  def self.wait_for_element( client, css_selector, timeout )
+  def self.wait_for_element( driver, css_selector, timeout )
     wait = Selenium::WebDriver::Wait.new( :timeout => timeout )
 
     wait.until do
-      client.find_element( "css", css_selector )
+      driver.find_element( "css", css_selector )
     end
   end
 
-  def self.click( client, css_selector )
-    client.find_element( "css", css_selector ).click
+  def self.click( driver, css_selector )
+    driver.find_element( "css", css_selector ).click
   end
 
-  def self.type( client, css_selector, text )
-    client.find_element( "css", css_selector ).send_keys( text )
+  def self.type( driver, css_selector, text )
+    driver.find_element( "css", css_selector ).send_keys( text )
   end
 
   def self.pause( seconds )
