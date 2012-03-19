@@ -25,15 +25,27 @@ class LoggerTest < Test::Unit::TestCase
     BrowserShooter::Logger.log( "message" )
   end
 
-  def test_result_when_true
-    test_result = { :success => true }
-    Kernel.expects( :put ).with( "." )
-    BrowserShooter::Logger.result( test_result )
+  def test_command_result_when_true
+    command_result = { :success => true }
+    Kernel.expects( :print ).with( "." )
+    BrowserShooter::Logger.command_result( command_result )
   end
 
-  def test_result_when_false
-    test_result = { :success => false }
-    Kernel.expects( :put ).with( "F" )
-    BrowserShooter::Logger.result( test_result )
+  def test_command_result_when_false
+    command_result = { :success => false }
+    Kernel.expects( :print ).with( "F" )
+    BrowserShooter::Logger.command_result( command_result )
+  end
+
+  def test_test_result_when_true
+    test_result = [{ :success => true }]
+    Kernel.expects( :puts ).with( " (success)" )
+    BrowserShooter::Logger.test_result( test_result )
+  end
+
+  def test_test_result_when_false
+    test_result = [{ :success => false }]
+    Kernel.expects( :puts ).with( " (fail)" )
+    BrowserShooter::Logger.test_result( test_result )
   end
 end

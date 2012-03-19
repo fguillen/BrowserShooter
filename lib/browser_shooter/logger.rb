@@ -10,9 +10,14 @@ module BrowserShooter
       end
     end
 
-    def result( test_result )
-      Kernel.put "." if test_result[:success]
-      Kernel.put "F" if !test_result[:success]
+    def command_result( command_result )
+      Kernel.print "." if command_result[:success]
+      Kernel.print "F" if !command_result[:success]
+    end
+
+    def test_result( test_result )
+      Kernel.puts " (success)" if test_result.all? { |e| e[:success] }
+      Kernel.puts " (fail)"    if !test_result.all? { |e| e[:success] }
     end
 
   end

@@ -1,6 +1,6 @@
 module BrowserShooter
   module LogExporter
-    def self.export( logs, logs_path, format = "cvs" )
+    def self.export( logs, logs_path, format = "csv" )
       logs_path = File.expand_path( "#{logs_path}/log.#{format}" )
       BrowserShooter::Logger.log "Exporting '#{format}' logs to #{logs_path}"
       FileUtils.mkdir_p( File.dirname( logs_path ) )

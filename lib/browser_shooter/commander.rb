@@ -1,18 +1,23 @@
 module BrowserShooter::Commander
 
   def self.script( commands, driver, output_path )
-    commands.map do |command|
-      result =
-        BrowserShooter::Commander.wrapper_execute(
-          command.strip,
-          driver,
-          output_path
-        )
+    test_result =
+      commands.map do |command|
+        command_result =
+          BrowserShooter::Commander.wrapper_execute(
+            command.strip,
+            driver,
+            output_path
+          )
 
-      BrowserShooter::Logger.result( result )
+        BrowserShooter::Logger.command_result( command_result )
 
-      result
-    end
+        command_result
+      end
+
+    BrowserShooter::Logger.test_result( test_result )
+
+    test_result
   end
 
   def self.execute( command, driver, output_path )

@@ -9,7 +9,8 @@ class CommanderTest < Test::Unit::TestCase
 
     BrowserShooter::Commander.expects( :wrapper_execute ).with( "command1", "driver", "output_path" ).returns( "result1" )
     BrowserShooter::Commander.expects( :wrapper_execute ).with( "command2", "driver", "output_path" ).returns( "result2" )
-    BrowserShooter::Logger.expects( :result ).twice
+    BrowserShooter::Logger.expects( :command_result ).twice
+    BrowserShooter::Logger.expects( :test_result )
 
     result = BrowserShooter::Commander.script( commands, "driver", "output_path" )
 
