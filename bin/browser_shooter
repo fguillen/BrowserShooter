@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-# Use:
-#     browser_shooter /path/to/config.yml
-
 begin
   require 'browser_shooter'
 rescue LoadError
@@ -10,9 +7,7 @@ rescue LoadError
   require 'browser_shooter'
 end
 
-if ( ARGV.size != 1 )
-  BrowserShooter::Logger.log "use: $ browser_shooter <config_file_path>"
-  exit 1
-end
+argv_parser = BrowserShooter::ARGVParsers.new
+argv_parser.parse_options( ARGV )
 
-BrowserShooter.new( ARGV[0] ).run
+BrowserShooter.new( argv_parser.config ).run

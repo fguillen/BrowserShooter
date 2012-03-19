@@ -11,16 +11,6 @@ class CommanderTest < Test::Unit::TestCase
     BrowserShooter::Commander.execute( "shot", "client", "shoot-path" )
   end
 
-  def test_execute_when_shot_system_with_sufix
-    BrowserShooter::Commander.expects( :shot_system ).with( "client", "shoot-path", "sufix" )
-    BrowserShooter::Commander.execute( "shot_system sufix", "client", "shoot-path" )
-  end
-
-  def test_execute_when_shot_system_without_sufix
-    BrowserShooter::Commander.expects( :shot_system ).with( "client", "shoot-path", nil )
-    BrowserShooter::Commander.execute( "shot_system", "client", "shoot-path" )
-  end
-
   def test_execute_when_pause
     BrowserShooter::Commander.expects( :pause ).with( 10 )
     BrowserShooter::Commander.execute( "pause 10", "client", "shoot-path" )
@@ -43,12 +33,13 @@ class CommanderTest < Test::Unit::TestCase
 
   def test_shot_with_sufix
     in_tmpdir do |tmpdir|
-      client = mock()
-      path = "#{tmpdir}/myfile"
+      client      = mock()
+      output_path = tmpdir
 
-      client.expects( :save_screenshot ).with( "#{path}_sufix.png" )
+      FileUtils.expects( :mkdir_p ).with( "#{output_path}/shots" )
+      client.expects( :save_screenshot ).with( "#{output_path}/shots/sufix.png" )
 
-      BrowserShooter::Commander.shot( client, path, "sufix" )
+      BrowserShooter::Commander.shot( client, output_path, "sufix" )
     end
   end
 
@@ -56,45 +47,15 @@ class CommanderTest < Test::Unit::TestCase
     BrowserShooter::Commander.stubs( :timestamp ).returns( "timestamp" )
 
     in_tmpdir do |tmpdir|
-      client = mock()
-      path = "#{tmpdir}/myfile"
+      client      = mock()
+      output_path = tmpdir
 
-      client.expects( :save_screenshot ).with( "#{path}_timestamp.png" )
+      FileUtils.expects( :mkdir_p ).with( "#{output_path}/shots" )
+      client.expects( :save_screenshot ).with( "#{output_path}/shots/timestamp.png" )
 
-      BrowserShooter::Commander.shot( client, path, nil )
+      BrowserShooter::Commander.shot( client, output_path, nil )
     end
   end
-
-  # FIXME: shot_system not supported in WebDriver
-  # def test_shot_system_with_sufix
-  #   in_tmpdir do |tmpdir|
-  #     client = stub( :capture_screenshot_to_string => read_fixture( "screenshot.base64" ) )
-  #     path = "#{tmpdir}/myfile"
-
-  #     BrowserShooter::Commander.shot_system( client, path, "sufix" )
-
-  #     assert_equal(
-  #      Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
-  #      Digest::MD5.hexdigest( File.read( "#{path}_sufix.system.png" ) )
-  #     )
-  #   end
-  # end
-
-  # def test_shot_system_without_sufix
-  #   BrowserShooter::Commander.stubs( :timestamp ).returns( "timestamp" )
-
-  #   in_tmpdir do |tmpdir|
-  #     client = stub( :capture_screenshot_to_string => read_fixture( "screenshot.base64" ) )
-  #     path = "#{tmpdir}/myfile"
-
-  #     BrowserShooter::Commander.shot_system( client, path, nil )
-
-  #     assert_equal(
-  #      Digest::MD5.hexdigest( Base64.decode64( read_fixture( "screenshot.base64" ) ) ),
-  #      Digest::MD5.hexdigest( File.read( "#{path}_timestamp.system.png" ) )
-  #     )
-  #   end
-  # end
 
   def test_wait_for_element
     wait    = mock()

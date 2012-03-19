@@ -72,9 +72,6 @@ class ConfiguratorTest < Test::Unit::TestCase
 
   def test_load_config
     BrowserShooter::Configurator.expects( :timestamp ).returns( "timestamp" )
-    FileUtils.expects( :mkdir_p ).with( "/output_path/timestamp" )
-    FileUtils.expects( :mkdir ).with( "/output_path/timestamp/shots" )
-    FileUtils.expects( :mkdir ).with( "/output_path/timestamp/logs" )
 
     config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config_simple.yml" )
 

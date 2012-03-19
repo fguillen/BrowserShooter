@@ -28,29 +28,26 @@ class BrowserShooter
     config = BrowserShooter::Configurator.new( opts )
     suites = config.suites
 
-    logs   = {}
-
     suites.each do |suite|
-      logs[suite.name] ||= {}
-
       suite.tests.each do |test|
-        logs[suite.name][test.name] ||= {}
-
         suite.browsers.each do |browser|
           output_path = "#{config["output_path"]}/#{suite.name}/#{test.name}/#{browser.name}"
 
-          logs[suite.name][test.name][browser.name] =
-            BrowserShooter::Driver.run_script_on_browser(
+          logs =
+            BrowserShooter::Driver.run_script(
               test.commands,
               browser,
               output_path
             )
+
+          BrowserShooter::LogExporter.export(
+            logs,
+            "#{output_path}/logs",
+            config["logs_format"]
+          )
         end
       end
     end
-
-
-    BrowserShooter::LogExporter.export( logs, "#{config["output_path"]}/logs", config["logs_format"] )
 
     BrowserShooter::Logger.log "... script running ended."
     BrowserShooter::Logger.log "shots are in: #{config["output_path"]}/shots"

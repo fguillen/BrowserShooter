@@ -1,6 +1,6 @@
 require_relative "test_helper"
 
-class BrowserScreenshotTest < Test::Unit::TestCase
+class BrowserShooterTest < Test::Unit::TestCase
   def test_initialize
     assert_equal( "opts", BrowserShooter.new( "opts" ).opts )
   end
@@ -22,12 +22,15 @@ class BrowserScreenshotTest < Test::Unit::TestCase
     config_mock.stubs( :[] ).returns( "config_value" )
     config_mock.expects( :suites ).returns( [suite1] )
 
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( test1.commands, browser1, "config_value/suite1/test1/browser1" ).returns( "log1" )
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( test1.commands, browser2, "config_value/suite1/test1/browser2" ).returns( "log2" )
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( test2.commands, browser1, "config_value/suite1/test2/browser1" ).returns( "log3" )
-    BrowserShooter::Driver.expects( :run_script_on_browser ).with( test2.commands, browser2, "config_value/suite1/test2/browser2" ).returns( "log4" )
+    BrowserShooter::Driver.expects( :run_script ).with( test1.commands, browser1, "config_value/suite1/test1/browser1" ).returns( "log1" )
+    BrowserShooter::Driver.expects( :run_script ).with( test1.commands, browser2, "config_value/suite1/test1/browser2" ).returns( "log2" )
+    BrowserShooter::Driver.expects( :run_script ).with( test2.commands, browser1, "config_value/suite1/test2/browser1" ).returns( "log3" )
+    BrowserShooter::Driver.expects( :run_script ).with( test2.commands, browser2, "config_value/suite1/test2/browser2" ).returns( "log4" )
 
-    BrowserShooter::LogExporter.expects( :export )
+    BrowserShooter::LogExporter.expects( :export ).with( "log1", "config_value/suite1/test1/browser1/logs", "config_value" )
+    BrowserShooter::LogExporter.expects( :export ).with( "log2", "config_value/suite1/test1/browser2/logs", "config_value" )
+    BrowserShooter::LogExporter.expects( :export ).with( "log3", "config_value/suite1/test2/browser1/logs", "config_value" )
+    BrowserShooter::LogExporter.expects( :export ).with( "log4", "config_value/suite1/test2/browser2/logs", "config_value" )
 
     BrowserShooter.new( opts ).run
   end

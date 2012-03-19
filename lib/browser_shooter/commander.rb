@@ -1,5 +1,5 @@
 module BrowserShooter::Commander
-  def self.execute( command, client, shots_path )
+  def self.execute( command, client, output_path )
     BrowserShooter::Logger.log "command: #{command}"
 
     if( command.split[0].strip == "shot" )
@@ -7,16 +7,7 @@ module BrowserShooter::Commander
 
       BrowserShooter::Commander.shot(
         client,
-        shots_path,
-        sufix
-      )
-
-    elsif( command.split[0].strip == "shot_system" )
-      sufix = command.split[1] ? command.split[1].strip : nil
-
-      BrowserShooter::Commander.shot_system(
-        client,
-        shots_path,
+        output_path,
         sufix
       )
 
@@ -54,7 +45,7 @@ module BrowserShooter::Commander
     end
   end
 
-  def self.wrapper_execute( command, client, shots_path )
+  def self.wrapper_execute( command, client, output_path )
     result = {
       :time     => Time.now.to_i,
       :command  => command
@@ -65,7 +56,7 @@ module BrowserShooter::Commander
         BrowserShooter::Commander.execute(
           command,
           client,
-          shots_path
+          output_path
         )
 
       result.merge!(
@@ -86,29 +77,17 @@ module BrowserShooter::Commander
     return result
   end
 
-  def self.shot( client, path, sufix = nil )
-    sufix = timestamp unless sufix
-    path  = "#{path}_#{sufix}.png"
+  def self.shot( client, output_path, sufix = nil )
+    sufix     = timestamp unless sufix
+    shot_path = "#{output_path}/shots/#{sufix}.png"
 
-    BrowserShooter::Logger.log "shooting in '#{path}'"
-    client.save_screenshot path
+    BrowserShooter::Logger.log "shooting in '#{shot_path}'"
 
-    return path
+    FileUtils.mkdir_p( File.dirname( shot_path ) )
+    client.save_screenshot( shot_path )
+
+    return shot_path
   end
-
-  # FIXME: Not supported in WebDriver
-  # def self.shot_system( client, path, sufix = timestamp )
-  #   sufix = timestamp unless sufix
-  #   path  = "#{path}_#{sufix}.system.png"
-
-  #   BrowserShooter::Logger.log "shooting system in '#{path}'"
-
-  #   File.open( path, "wb" ) do |f|
-  #     f.write( Base64.decode64( client.capture_screenshot_to_string ) )
-  #   end
-
-  #   return path
-  # end
 
   def self.wait_for_element( client, css_selector, timeout )
     wait = Selenium::WebDriver::Wait.new( :timeout => timeout )

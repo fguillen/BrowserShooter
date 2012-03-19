@@ -2,8 +2,7 @@ require_relative "test_helper"
 
 class DriverTest < Test::Unit::TestCase
 
-  def test_run_script_on_browser
-
+  def test_run_script
     browser = BrowserShooter::Models::Browser.new( "browser-name", "browser-url", "browser-type" )
     commands = ["command1", "command2"]
 
@@ -20,6 +19,6 @@ class DriverTest < Test::Unit::TestCase
     BrowserShooter::Commander.expects( :execute ).with( "command1", client, "output_path")
     BrowserShooter::Commander.expects( :execute ).with( "command2", client, "output_path")
 
-    BrowserShooter::Driver.run_script_on_browser( commands, browser, "output_path" )
+    BrowserShooter::Driver.run_script( commands, browser, "output_path" )
   end
 end

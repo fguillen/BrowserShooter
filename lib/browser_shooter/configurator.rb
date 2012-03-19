@@ -83,10 +83,6 @@ class BrowserShooter::Configurator
     output_path = File.expand_path( "#{output_path}/#{timestamp}" )
     BrowserShooter::Logger.log( "output_path: #{output_path}" )
 
-    FileUtils.mkdir_p( output_path )
-    FileUtils.mkdir( "#{output_path}/shots" )
-    FileUtils.mkdir( "#{output_path}/logs" )
-
     output_path
   end
 

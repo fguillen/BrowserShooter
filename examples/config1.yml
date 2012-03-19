@@ -1,27 +1,34 @@
 output_path: "~/browser_shoots"
 
-scripts:
-  google:
-    commands: |
-      navigate.to "http://www.google.de"
-      shot before
-      type "input[name='q']", "beautiful houses"
-      click "input[name='btnG']"
-      pause 3
-      click "a.kls"
-      pause 3
-      shot after
+tests:
+  google: |
+    navigate.to "http://www.google.de"
+    shot before
+    type "input[name='q']", "beautiful houses"
+    click "input[name='btnG']"
+    pause 3
+    click "a.kls"
+    pause 3
+    shot after
 
-  miniclip:
-    commands: |
-      navigate.to "http://www.miniclip.com/games/de/"
-      shot
+  miniclip: |
+    navigate.to "http://www.miniclip.com/games/de/"
+    shot
 
 browsers:
   ios-firefox:
     url: "http://127.0.0.1:4444/wd/hub"
-    browser: "firefox"
+    type: "firefox"
 
   ios-chrome:
     url: "http://127.0.0.1:4444/wd/hub"
-    browser: "chrome"
+    type: "chrome"
+
+suites:
+  suite1:
+    tests:
+      - google
+      - miniclip
+    browsers:
+      - ios-firefox
+      - ios-chrome
