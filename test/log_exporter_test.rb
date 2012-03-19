@@ -9,7 +9,7 @@ class LogExporterTest < Test::Unit::TestCase
         :time     => "the time 1",
         :success  => true,
         :command  => "the command 1",
-        :message  => "the message 1"
+        :message  => "the message 1 \n with 2 lines"
       },
       {
         :time     => "the time 2",

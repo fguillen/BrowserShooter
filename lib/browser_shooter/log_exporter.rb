@@ -10,10 +10,11 @@ module BrowserShooter
 
     def self.export_to_csv( logs, path )
       File.open( path, "w" ) do |f|
-        f.puts logs.first.keys.join( " | " )
+        f.puts "time | success | command | message"
 
         logs.each do |result|
-          f.puts result.values.join( " | " )
+          line = "#{result[:time]} | #{result[:success]} | #{result[:command]} | #{result[:message]}".gsub( "\n", " - " )
+          f.puts line
         end
       end
     end
