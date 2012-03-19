@@ -24,4 +24,16 @@ class LoggerTest < Test::Unit::TestCase
     BrowserShooter::Logger.verbose = false
     BrowserShooter::Logger.log( "message" )
   end
+
+  def test_result_when_true
+    test_result = { :success => true }
+    Kernel.expects( :put ).with( "." )
+    BrowserShooter::Logger.result( test_result )
+  end
+
+  def test_result_when_false
+    test_result = { :success => false }
+    Kernel.expects( :put ).with( "F" )
+    BrowserShooter::Logger.result( test_result )
+  end
 end

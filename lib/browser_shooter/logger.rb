@@ -10,5 +10,10 @@ module BrowserShooter
       end
     end
 
+    def result( test_result )
+      Kernel.put "." if test_result[:success]
+      Kernel.put "F" if !test_result[:success]
+    end
+
   end
 end

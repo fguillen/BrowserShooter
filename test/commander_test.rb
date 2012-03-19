@@ -1,6 +1,21 @@
 require_relative "test_helper"
 
 class CommanderTest < Test::Unit::TestCase
+  def test_script
+    commands = [
+      "command1",
+      "  command2 "
+    ]
+
+    BrowserShooter::Commander.expects( :wrapper_execute ).with( "command1", "driver", "output_path" ).returns( "result1" )
+    BrowserShooter::Commander.expects( :wrapper_execute ).with( "command2", "driver", "output_path" ).returns( "result2" )
+    BrowserShooter::Logger.expects( :result ).twice
+
+    result = BrowserShooter::Commander.script( commands, "driver", "output_path" )
+
+    assert_equal( ["result1", "result2"], result )
+  end
+
   def test_execute_when_shot_with_sufix
     BrowserShooter::Commander.expects( :shot ).with( "driver", "shoot-path", "sufix" )
     BrowserShooter::Commander.execute( "shot sufix", "driver", "shoot-path" )
