@@ -34,8 +34,6 @@ module BrowserShooter
       end
 
       BrowserShooter::Logger.log "... script running ended."
-      BrowserShooter::Logger.log "shots are in: #{config["output_path"]}/shots"
-      BrowserShooter::Logger.log "logs are in: #{config["output_path"]}/logs"
       BrowserShooter::Logger.log "BYE!"
     end
   end
