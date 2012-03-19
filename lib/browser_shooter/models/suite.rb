@@ -1,4 +1,4 @@
-class BrowserShooter
+module BrowserShooter
   module Models
     class Suite < Struct.new( :name, :tests, :browsers )
     end

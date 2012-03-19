@@ -1,4 +1,4 @@
-class BrowserShooter
+module BrowserShooter
   module Driver
     def self.run_script(commands, browser, output_path)
       client = nil

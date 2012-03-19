@@ -10,4 +10,4 @@ end
 argv_parser = BrowserShooter::ARGVParsers.new
 argv_parser.parse_options( ARGV )
 
-BrowserShooter.new( argv_parser.config ).run
+BrowserShooter::Base.new( argv_parser.config ).run

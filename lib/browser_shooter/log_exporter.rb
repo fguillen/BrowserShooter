@@ -1,4 +1,4 @@
-class BrowserShooter
+module BrowserShooter
   module LogExporter
     def self.export( logs, path, format )
       BrowserShooter::Logger.log "Exporting '#{format}' logs to #{path}"

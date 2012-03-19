@@ -67,6 +67,9 @@ module BrowserShooter::Commander
     rescue Exception => e
       BrowserShooter::Logger.log "ERROR: #{e.message}"
 
+      puts "XXX: Exception"
+      puts e.backtrace.join( "\n" )
+
       result.merge!(
         :success  => false,
         :message  => e.message

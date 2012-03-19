@@ -1,92 +1,94 @@
-class BrowserShooter::Configurator
-  attr_reader :suites
+module BrowserShooter
+  class Configurator
+    attr_reader :suites
 
-  def initialize( opts )
-    @config = BrowserShooter::Configurator.load_config( opts[:config_file] )
-    models = BrowserShooter::Configurator.build_models( @config )
-    @suites = BrowserShooter::Configurator.filter_suites( models, opts )
-  end
-
-  def [](value)
-    @config[value]
-  end
-
-  def self.filter_suites( models, opts )
-    suites = []
-
-    if( opts[:suite] )
-      suite  = models[:suites].select{ |e| e.name = opts[:suite] }.first
-      suites = [suite]
-
-    elsif( opts[:test] && opts[:browsers] )
-      test      = models[:tests].select{ |e| e.name = opts[:test] }.first
-      browsers  = models[:browsers].select{ |e| opts[:browsers].include? e.name }
-      suite     = BrowserShooter::Models::Suite.new( "anonymous", [test], browsers )
-      suites    = [suite]
-
-    elsif( opts[:test] )
-      test      = models[:tests].select{ |e| e.name = opts[:test] }.first
-      browsers  = models[:browsers]
-      suite     = BrowserShooter::Models::Suite.new( "anonymous", [test], browsers )
-      suites    = [suite]
-
-    else
-      suites    = models[:suites]
-
+    def initialize( opts )
+      @config = BrowserShooter::Configurator.load_config( opts[:config_file] )
+      models = BrowserShooter::Configurator.build_models( @config )
+      @suites = BrowserShooter::Configurator.filter_suites( models, opts )
     end
 
-    suites
-  end
+    def [](value)
+      @config[value]
+    end
 
-  def self.build_models( config )
-    tests =
-      config["tests"].map do |name, commands|
-        test_commands = commands.split( "\n" )
+    def self.filter_suites( models, opts )
+      suites = []
 
-        BrowserShooter::Models::Test.new( name, test_commands )
+      if( opts[:suite] )
+        suite  = models[:suites].select{ |e| e.name = opts[:suite] }.first
+        suites = [suite]
+
+      elsif( opts[:test] && opts[:browsers] )
+        test      = models[:tests].select{ |e| e.name = opts[:test] }.first
+        browsers  = models[:browsers].select{ |e| opts[:browsers].include? e.name }
+        suite     = BrowserShooter::Models::Suite.new( "anonymous", [test], browsers )
+        suites    = [suite]
+
+      elsif( opts[:test] )
+        test      = models[:tests].select{ |e| e.name = opts[:test] }.first
+        browsers  = models[:browsers]
+        suite     = BrowserShooter::Models::Suite.new( "anonymous", [test], browsers )
+        suites    = [suite]
+
+      else
+        suites    = models[:suites]
+
       end
 
-    browsers =
-      config["browsers"].map do |name, opts|
-        BrowserShooter::Models::Browser.new( name, opts["url"], opts["type"] )
-      end
+      suites
+    end
 
-    suites =
-      config["suites"].map do |name, opts|
-        suite_tests    = tests.select{ |e| opts["tests"].include? e.name }
-        suite_browsers = browsers.select{ |e| opts["browsers"].include? e.name }
+    def self.build_models( config )
+      tests =
+        config["tests"].map do |name, commands|
+          test_commands = commands.split( "\n" )
 
-        BrowserShooter::Models::Suite.new( name, suite_tests, suite_browsers )
-      end
+          BrowserShooter::Models::Test.new( name, test_commands )
+        end
 
-    {
-      :tests    => tests,
-      :browsers => browsers,
-      :suites   => suites
-    }
-  end
+      browsers =
+        config["browsers"].map do |name, opts|
+          BrowserShooter::Models::Browser.new( name, opts["url"], opts["type"] )
+        end
 
-  def self.load_config( config_file_path )
-    config = {
-      "output_path" => "~/browser_shooter",
-      "logs_format" => "csv"
-    }
+      suites =
+        config["suites"].map do |name, opts|
+          suite_tests    = tests.select{ |e| opts["tests"].include? e.name }
+          suite_browsers = browsers.select{ |e| opts["browsers"].include? e.name }
 
-    config.merge! YAML.load_file( config_file_path )
+          BrowserShooter::Models::Suite.new( name, suite_tests, suite_browsers )
+        end
 
-    config["output_path"] = set_up_output_path( config["output_path"] )
+      {
+        :tests    => tests,
+        :browsers => browsers,
+        :suites   => suites
+      }
+    end
 
-    config
-  end
+    def self.load_config( config_file_path )
+      config = {
+        "output_path" => "~/browser_shooter",
+        "logs_format" => "csv"
+      }
 
-  def self.set_up_output_path( output_path )
-    output_path = File.expand_path( "#{output_path}/#{timestamp}" )
-    BrowserShooter::Logger.log( "output_path: #{output_path}" )
+      config.merge! YAML.load_file( config_file_path )
 
-    output_path
-  end
+      config["output_path"] = set_up_output_path( config["output_path"] )
 
-  def self.timestamp
-    Time.now.strftime("%Y%m%d%H%M%S")
+      config
+    end
+
+    def self.set_up_output_path( output_path )
+      output_path = File.expand_path( "#{output_path}/#{timestamp}" )
+      BrowserShooter::Logger.log( "output_path: #{output_path}" )
+
+      output_path
+    end
+
+    def self.timestamp
+      Time.now.strftime("%Y%m%d%H%M%S")
+    end
   end
 end

@@ -1,8 +1,8 @@
 require_relative "test_helper"
 
-class BrowserShooterTest < Test::Unit::TestCase
+class BaseTest < Test::Unit::TestCase
   def test_initialize
-    assert_equal( "opts", BrowserShooter.new( "opts" ).opts )
+    assert_equal( "opts", BrowserShooter::Base.new( "opts" ).opts )
   end
 
   def test_run
@@ -32,6 +32,6 @@ class BrowserShooterTest < Test::Unit::TestCase
     BrowserShooter::LogExporter.expects( :export ).with( "log3", "config_value/suite1/test2/browser1/logs", "config_value" )
     BrowserShooter::LogExporter.expects( :export ).with( "log4", "config_value/suite1/test2/browser2/logs", "config_value" )
 
-    BrowserShooter.new( opts ).run
+    BrowserShooter::Base.new( opts ).run
   end
 end
