@@ -7,6 +7,7 @@ module BrowserShooter
     end
 
     def run
+      BrowserShooter::Logger.verbose = opts[:verbose]
       BrowserShooter::Logger.log "Starting script running with version #{BrowserShooter::VERSION}..."
 
       config = BrowserShooter::Configurator.new( opts )

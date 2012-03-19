@@ -33,6 +33,14 @@ module BrowserShooter
     )
 
     option(
+      :verbose,
+      :short        => "-v",
+      :long         => "--verbose",
+      :description  => "More verbose output",
+      :boolean      => true
+    )
+
+    option(
       :help,
       :short        => "-h",
       :long         => "--help",
