@@ -26,7 +26,7 @@ In the servers that are gonna execute Chrome you have to install the [ChromeDriv
 
 Repeat these steps in every VM.
 
-### Setup the driver
+### Setup the client
 
 #### Install the gem
 
@@ -38,53 +38,103 @@ Create a YAML file like this:
 
     # myconfig.yml
     output_path: "/tmp/shoots"
-    logs_format: "csv"
 
-    scripts:
-      google:
-        name: "google"
-        # commands are WebDriver commands
-        # except 'shot' command which receive an optional param with the 'sufix' of the page screenshot png
-        # except 'pause' command which use a Ruby 'sleep' command to pause
-        # except 'click' command whith receive a 'css_selector' as a param, find the element and click on it
-        # except 'type' command whith receive two params: 'css_selector' ana a 'message', find the element and type the message on it
-        # except 'wait_for_element' command whith receive two params: 'css_selector', and a 'timeout' in seconds
-        commands: |
-          navigate.to "http://www.google.de"
-          shot before
-          type "input[name='q']", "beautiful houses"
-          click "input[name='btnG']"
-          pause 3
-          click "a.kls"
-          pause 3
-          shot after
+    tests:
+      google: |
+        navigate.to "http://www.google.de"
+        shot before
+        type "input[name='q']", "beautiful houses"
+        click "input[name='btnG']"
+        pause 3
+        click "a.kls"
+        pause 3
+        shot after
+
+      miniclip: |
+        navigate.to "http://www.miniclip.com/games/de/"
+        shot
 
     browsers:
       windows-firefox:
-        name: "windows-firefox"
         url: "http://127.0.0.1:4444/wd/hub"
-        browser: "firefox"
+        type: "firefox"
 
       windows-iexplore:
-        name: "windows-iexploreproxy"
         url: "http://127.0.0.1:4444/wd/hub"
-        browser: "*iexploreproxy"
+        type: "ie"
+
+    suites:
+      suite1:
+        tests:
+          - google
+          - miniclip
+        browsers:
+          - ios-firefox
+          - ios-chrome
+
+      suite2:
+        tests:
+          - google
+        browsers:
+          - ios-chrome
+
 
 Look in the [examples folder](https://github.com/fguillen/BrowserShooter/tree/master/examples) for more complete examples.
+
+##### Tests section
+
+Commands are WebDriver commands, except:
+
+* **shot** command which receive an optional param with the 'sufix' of the page screenshot png
+* **pause** command which use a Ruby 'sleep' command to pause
+* **click** command which receive a 'css_selector' as a param, find the element and click on it
+* **type** command which receive two params: 'css_selector' ana a 'message', find the element and type the message on it
+* **wait_for_element** command which receive two params: 'css_selector', and a 'timeout' in seconds
+
+You can define as much tests as you want. Every test is composed by a list of **one line** commands.
+
+##### Browsers section
+
+All the available browsers with the **selenium server url** and the **selenium browser type**.
+
+##### Suites section
+
+Groups of **tests** and **browsers** to be executed as one.
 
 
 #### Run the BrowserShooter script
 
-    $ browser_shooter ./my/config.yml
+##### The simple way
+
+    $ browser_shooter --config ./my/config.yml
+
+##### Choosing a suite
+
+    $ browser_shooter --config ./my/config.yml -s --suite suite1
+
+##### Choosing a test
+
+    $ browser_shooter --config ./my/config.yml -s --test google
+
+##### Choosing a test an a list of browsers
+
+    $ browser_shooter --config ./my/config.yml -s --test google --browsers windows-firefox,windows-iexplore
+
+##### Check all the options
+
+    $ browser_shooter --help
+
+
+#### The output paths
 
 The screenshots will be stored in:
 
-    /<output_path>/<time_stamp>/shots
+    /<output_path>/<time_stamp>/<suite_name>/<test_name>/<browser_name>/shots
 
 The logs will be stored in:
 
-    /<output_path>/<time_stamp>/logs
+    /<output_path>/<time_stamp>/<suite_name>/<test_name>/<browser_name>/logs
 
 ## Status
 
-Still in a _discovery_ state.. but is already **functional**.
+Still in a _development_ state.. but is already **functional**.

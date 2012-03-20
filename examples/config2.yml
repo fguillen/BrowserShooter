@@ -1,49 +1,54 @@
 output_path: "~/browser_shooter"
 
-scripts:
-  lightbox:
-    name: "lightbox"
-    commands: |
-      navigate.to "http://192.168.70.70/test/browser_shooter/lightbox_bareplayer.html"
-      shot 01_first
-      pause 5
-      switch_to.alert.accept
-      click "a"
-      pause 5
-      shot 02_video
-      switch_to.frame "_sp_wiframe"
-      execute_script "$f().play()"
-      pause 3
-      shot 03_video_start
-      wait_for_element "span.enabled", 40
-      shot 04_green_button
-      click "span.enabled"
-      pause 8
-      switch_to.alert.accept
-      shot 05_spinner
-      switch_to.default_content
-      click "#sp_close_x"
-      switch_to.alert.accept
-      pause 4
-      shot 06_hidden
+tests:
+  lightbox: |
+    navigate.to "http://192.168.70.70/test/browser_shooter/lightbox_bareplayer.html"
+    shot 01_first
+    pause 5
+    switch_to.alert.accept
+    click "a"
+    pause 5
+    shot 02_video
+    switch_to.frame "_sp_wiframe"
+    execute_script "$f().play()"
+    pause 3
+    shot 03_video_start
+    wait_for_element "span.enabled", 40
+    shot 04_green_button
+    click "span.enabled"
+    pause 8
+    switch_to.alert.accept
+    shot 05_spinner
+    switch_to.default_content
+    click "#sp_close_x"
+    switch_to.alert.accept
+    pause 4
+    shot 06_hidden
 
 browsers:
-  # osx-chrome:
-  #   name: "osx-chrome"
-  #   url: "http://127.0.0.1:4444/wd/hub"
-  #   browser: "chrome"
+  osx-chrome:
+    url: "http://127.0.0.1:4444/wd/hub"
+    type: "chrome"
 
-  # windows-chrome:
-  #   name: "windows-chrome"
-  #   url: "http://10.211.55.4:4444/wd/hub"
-  #   browser: "chrome"
+  windows-chrome:
+    url: "http://10.211.55.4:4444/wd/hub"
+    type: "chrome"
 
-  # windows-firefox:
-  #   name: "windows-firefox"
-  #   url: "http://10.211.55.4:4444/wd/hub"
-  #   browser: "firefox"
+  windows-firefox:
+    url: "http://10.211.55.4:4444/wd/hub"
+    type: "firefox"
 
   windows-ie:
-    name: "windows-ie"
     url: "http://10.211.55.4:4444/wd/hub"
-    browser: "ie"
+    type: "ie"
+
+suites:
+  suite1:
+    tests:
+      - lightbox
+    browsers:
+      - osx-crhome
+      - windows-chrome
+      - windows-firefox
+      - windows-ie
+
