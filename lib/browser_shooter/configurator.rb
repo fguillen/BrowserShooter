@@ -16,17 +16,25 @@ module BrowserShooter
       suites = []
 
       if( opts[:suite] )
-        suite  = models[:suites].select{ |e| e.name = opts[:suite] }.first
+        suite  = models[:suites].select{ |e| e.name == opts[:suite] }.first
+        raise ArgumentError, "Not suite found '#{opts[:suite]}'" if suite.nil?
+
         suites = [suite]
 
       elsif( opts[:test] && opts[:browsers] )
-        test      = models[:tests].select{ |e| e.name = opts[:test] }.first
+        test      = models[:tests].select{ |e| e.name == opts[:test] }.first
+        raise ArgumentError, "Not test found '#{opts[:test]}'" if test.nil?
+
         browsers  = models[:browsers].select{ |e| opts[:browsers].include? e.name }
+        raise ArgumentError, "Not browsers found '#{opts[:browsers].join( "," )}'" if browsers.empty?
+
         suite     = BrowserShooter::Models::Suite.new( "anonymous", [test], browsers )
         suites    = [suite]
 
       elsif( opts[:test] )
-        test      = models[:tests].select{ |e| e.name = opts[:test] }.first
+        test      = models[:tests].select{ |e| e.name == opts[:test] }.first
+        raise ArgumentError, "Not test found '#{opts[:test]}'" if test.nil?
+
         browsers  = models[:browsers]
         suite     = BrowserShooter::Models::Suite.new( "anonymous", [test], browsers )
         suites    = [suite]

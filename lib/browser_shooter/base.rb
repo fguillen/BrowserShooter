@@ -8,7 +8,7 @@ module BrowserShooter
 
     def run
       BrowserShooter::Logger.verbose = opts[:verbose]
-      BrowserShooter::Logger.log "Starting script running with version #{BrowserShooter::VERSION}..."
+      BrowserShooter::Logger.log( "Starting script running with version #{BrowserShooter::VERSION}..." )
 
       config = BrowserShooter::Configurator.new( opts )
       suites = config.suites
@@ -26,8 +26,9 @@ module BrowserShooter
         end
       end
 
-      BrowserShooter::Logger.log "... script running ended."
-      BrowserShooter::Logger.log "BYE!"
+      BrowserShooter::Logger.log( "... script running ended." )
+      BrowserShooter::Logger.log( "Logs and Shots are in: #{config["output_path"]}", true )
+      BrowserShooter::Logger.log( "BYE!" )
     end
 
     def self.run_test( suite, test, browser, output_path )
