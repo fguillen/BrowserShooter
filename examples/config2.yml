@@ -29,18 +29,22 @@ browsers:
   osx-chrome:
     url: "http://127.0.0.1:4444/wd/hub"
     type: "chrome"
+    vm: "myVM"
 
   windows-chrome:
     url: "http://10.211.55.4:4444/wd/hub"
     type: "chrome"
+    vm: "myVM"
 
   windows-firefox:
     url: "http://10.211.55.4:4444/wd/hub"
     type: "firefox"
+    vm: "myVM"
 
   windows-ie:
     url: "http://10.211.55.4:4444/wd/hub"
     type: "ie"
+    vm: "myVM"
 
 suites:
   suite1:

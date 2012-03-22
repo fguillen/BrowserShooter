@@ -29,6 +29,7 @@ class ConfiguratorTest < Test::Unit::TestCase
     assert_equal( "windows-firefox", models[:browsers].first.name )
     assert_equal( "http://10.211.55.4:4444/wd/hub", models[:browsers].first.url )
     assert_equal( "firefox", models[:browsers].first.type )
+    assert_equal( "vmName1", models[:browsers].first.vm )
 
     assert_equal( 2, models[:suites].size )
     assert_equal( "suite1", models[:suites].first.name )

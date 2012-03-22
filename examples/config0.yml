@@ -3,7 +3,8 @@ output_path: "~/browser_shoots"
 tests:
   google: |
     navigate.to "http://www.google.com"
-    shot
+    shot browser
+    shot_system system
 
   miniclip: |
     navigate.to "http://www.miniclip.com/games/de/"
@@ -13,10 +14,17 @@ browsers:
   ios-firefox:
     url: "http://127.0.0.1:4444/wd/hub"
     type: "firefox"
+    vm: "My VM"
 
   ios-chrome:
     url: "http://127.0.0.1:4444/wd/hub"
     type: "chrome"
+    vm: "My VM"
+
+  win-ie:
+    url: "http://192.168.2.102:4444/wd/hub"
+    type: "ie"
+    vm: "windows7"
 
 suites:
   suite1:
@@ -31,5 +39,5 @@ suites:
     tests:
       - google
     browsers:
-      - ios-chrome
+      - win-ie
 

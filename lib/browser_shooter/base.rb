@@ -49,6 +49,7 @@ module BrowserShooter
           BrowserShooter::Commander.script(
             test.commands,
             driver,
+            browser,
             output_path
           )
 
