@@ -57,7 +57,7 @@ module BrowserShooter
 
       browsers =
         config["browsers"].map do |name, opts|
-          BrowserShooter::Models::Browser.new( name, opts["url"], opts["type"] )
+          BrowserShooter::Models::Browser.new( name, opts["url"], opts["type"], opts["vm"] )
         end
 
       suites =

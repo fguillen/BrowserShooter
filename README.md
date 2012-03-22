@@ -58,10 +58,12 @@ Create a YAML file like this:
       windows-firefox:
         url: "http://127.0.0.1:4444/wd/hub"
         type: "firefox"
+        vm: "VirtualBox name"
 
       windows-iexplore:
         url: "http://127.0.0.1:4444/wd/hub"
         type: "ie"
+        vm: "VirtualBox name"
 
     suites:
       suite1:
@@ -86,6 +88,7 @@ Look in the [examples folder](https://github.com/fguillen/BrowserShooter/tree/ma
 Commands are WebDriver commands, except:
 
 * **shot** command which receive an optional param with the 'sufix' of the page screenshot png
+* **shot_system** equal to 'shot' but use the "VirtualBox" system command "VBoxManage" to make an screenshot.
 * **pause** command which use a Ruby 'sleep' command to pause
 * **click** command which receive a 'css_selector' as a param, find the element and click on it
 * **type** command which receive two params: 'css_selector' ana a 'message', find the element and type the message on it

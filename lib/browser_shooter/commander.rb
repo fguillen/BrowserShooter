@@ -1,12 +1,13 @@
 module BrowserShooter::Commander
 
-  def self.script( commands, driver, output_path )
+  def self.script( commands, driver, browser, output_path )
     test_result =
       commands.map do |command|
         command_result =
           BrowserShooter::Commander.wrapper_execute(
             command.strip,
             driver,
+            browser,
             output_path
           )
 
@@ -20,7 +21,7 @@ module BrowserShooter::Commander
     test_result
   end
 
-  def self.execute( command, driver, output_path )
+  def self.execute( command, driver, browser, output_path )
     BrowserShooter::Logger.log "command: #{command}"
 
     if( command.split[0].strip == "shot" )
@@ -28,6 +29,16 @@ module BrowserShooter::Commander
 
       BrowserShooter::Commander.shot(
         driver,
+        output_path,
+        sufix
+      )
+
+    elsif( command.split[0].strip == "shot_system" )
+      sufix = command.split[1] ? command.split[1].strip : nil
+
+      BrowserShooter::Commander.shot_system(
+        driver,
+        browser,
         output_path,
         sufix
       )
@@ -110,6 +121,24 @@ module BrowserShooter::Commander
 
     FileUtils.mkdir_p( File.dirname( shot_path ) )
     driver.save_screenshot( shot_path )
+
+    return shot_path
+  end
+
+  def self.shot_system( driver, browser, output_path, sufix = nil )
+    sufix     = timestamp unless sufix
+    shot_path = "#{output_path}/shots/#{sufix}.png"
+
+    BrowserShooter::Logger.log "shooting system in '#{shot_path}'"
+
+    FileUtils.mkdir_p( File.dirname( shot_path ) )
+
+    command = "VBoxManage controlvm '#{browser.vm}' screenshotpng '#{shot_path}'"
+    success = Kernel.system( command )
+
+    if( !success )
+      raise SystemCallError, "Shoot system command [#{command}] returns error: '#{$?}'"
+    end
 
     return shot_path
   end

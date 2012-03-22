@@ -34,7 +34,7 @@ class BaseTest < Test::Unit::TestCase
     BrowserShooter::Base.new( opts ).run
   end
 
-  def test_run_script
+  def test_run_test
     expected_opts = {
       :url                    => "url1",
       :desired_capabilities   => "type1".to_sym
@@ -43,7 +43,7 @@ class BaseTest < Test::Unit::TestCase
     driver = mock()
     driver.expects( :quit )
     Selenium::WebDriver.expects( :for ).with( :remote, expected_opts ).returns( driver )
-    BrowserShooter::Commander.expects( :script ).with( @test1.commands, driver, "output_path/suite1/test1/browser1" ).returns( "log1" )
+    BrowserShooter::Commander.expects( :script ).with( @test1.commands, driver, @browser1, "output_path/suite1/test1/browser1" ).returns( "log1" )
     BrowserShooter::LogExporter.expects( :export ).with( "log1", "output_path/suite1/test1/browser1/logs" )
 
     BrowserShooter::Base.run_test( @suite1, @test1, @browser1, "output_path" )

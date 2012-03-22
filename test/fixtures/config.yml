@@ -17,14 +17,17 @@ browsers:
   windows-firefox:
     url: "http://10.211.55.4:4444/wd/hub"
     type: "firefox"
+    vm: "vmName1"
 
   windows-iexplore:
     url: "http://10.211.55.4:4444/wd/hub"
     type: "iexploreproxy"
+    vm: "vmName2"
 
   linux-firefox:
     url: "http://10.211.55.4:4444/wd/hub"
     type: "firefox"
+    vm: "vmName3"
 
 suites:
   suite1:
