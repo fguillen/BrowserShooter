@@ -49,6 +49,7 @@ Create a YAML file like this:
         click "a.kls"
         pause 3
         shot after
+        shot_system final_shot
 
       miniclip: |
         navigate.to "http://www.miniclip.com/games/de/"
@@ -88,7 +89,7 @@ Look in the [examples folder](https://github.com/fguillen/BrowserShooter/tree/ma
 Commands are WebDriver commands, except:
 
 * **shot** command which receive an optional param with the 'sufix' of the page screenshot png
-* **shot_system** equal to 'shot' but use the "VirtualBox" system command "VBoxManage" to make an screenshot.
+* **shot_system** equal to 'shot' but use the "VirtualBox" system command "VBoxManage" to make an screenshot of the OS screen.
 * **pause** command which use a Ruby 'sleep' command to pause
 * **click** command which receive a 'css_selector' as a param, find the element and click on it
 * **type** command which receive two params: 'css_selector' ana a 'message', find the element and type the message on it
@@ -99,6 +100,8 @@ You can define as much tests as you want. Every test is composed by a list of **
 ##### Browsers section
 
 All the available browsers with the **selenium server url** and the **selenium browser type**.
+
+Also if you are gonna use the _shot_system_ command you have to indicate the name of the VirtualBox machine in the **vm** attribute.
 
 ##### Suites section
 
