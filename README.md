@@ -141,3 +141,7 @@ The logs will be stored in:
 ## Status
 
 Still in a _development_ state.. but is already **functional**.
+
+## TODO
+
+Support _Parallels_ screenshots with `$ prlctl capture`.
