@@ -1,4 +1,7 @@
 output_path: "/tmp/output"
+extensions:
+  - "~/browser_shooter/extensions/extension1.rb"
+  - "~/browser_shooter/extensions/extension2.rb"
 
 tests:
   google: |

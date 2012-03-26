@@ -4,8 +4,10 @@ module BrowserShooter
 
     def initialize( opts )
       @config = BrowserShooter::Configurator.load_config( opts[:config_file] )
-      models = BrowserShooter::Configurator.build_models( @config )
+      models  = BrowserShooter::Configurator.build_models( @config )
       @suites = BrowserShooter::Configurator.filter_suites( models, opts )
+
+      BrowserShooter::Configurator.load_extensions( @config["extensions"] ) if @config["extensions"]
     end
 
     def [](value)
@@ -77,22 +79,29 @@ module BrowserShooter
 
     def self.load_config( config_file_path )
       config = {
-        "output_path" => "~/browser_shooter",
-        "logs_format" => "csv"
+        "output_path" => "~/browser_shooter"
       }
 
       config.merge! YAML.load_file( config_file_path )
 
-      config["output_path"] = set_up_output_path( config["output_path"] )
+      config["output_path"] = setup_output_path( config["output_path"] )
 
       config
     end
 
-    def self.set_up_output_path( output_path )
+    def self.setup_output_path( output_path )
       output_path = File.expand_path( "#{output_path}/#{timestamp}" )
       BrowserShooter::Logger.log( "output_path: #{output_path}" )
 
       output_path
+    end
+
+    def self.load_extensions( extensions_paths )
+      extensions_paths.each do |extension_path|
+        extension_path = File.expand_path( extension_path )
+        BrowserShooter::Logger.log( "Loading extension: #{extension_path}" )
+        Kernel.require( extension_path )
+      end
     end
 
     def self.timestamp

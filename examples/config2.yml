@@ -3,27 +3,27 @@ output_path: "~/browser_shooter"
 tests:
   lightbox: |
     navigate.to "http://192.168.70.70/test/browser_shooter/lightbox_bareplayer.html"
-    shot 01_first
+    shot "01_first"
     pause 5
     switch_to.alert.accept
     click "a"
     pause 5
-    shot 02_video
+    shot "02_video"
     switch_to.frame "_sp_wiframe"
     execute_script "$f().play()"
     pause 3
-    shot 03_video_start
+    shot "03_video_start"
     wait_for_element "span.enabled", 40
-    shot 04_green_button
+    shot "04_green_button"
     click "span.enabled"
     pause 8
     switch_to.alert.accept
-    shot 05_spinner
+    shot "05_spinner"
     switch_to.default_content
     click "#sp_close_x"
     switch_to.alert.accept
     pause 4
-    shot 06_hidden
+    shot "06_hidden"
 
 browsers:
   osx-chrome:

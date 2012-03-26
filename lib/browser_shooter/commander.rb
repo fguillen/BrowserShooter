@@ -1,14 +1,20 @@
 module BrowserShooter::Commander
 
   def self.script( commands, driver, browser, output_path )
+
+    command_executor =
+      BrowserShooter::Commands::Base.new(
+        driver,
+        browser,
+        output_path
+      )
+
     test_result =
       commands.map do |command|
         command_result =
           BrowserShooter::Commander.wrapper_execute(
-            command.strip,
-            driver,
-            browser,
-            output_path
+            command_executor,
+            command.strip
           )
 
         BrowserShooter::Logger.command_result( command_result )
@@ -21,63 +27,7 @@ module BrowserShooter::Commander
     test_result
   end
 
-  def self.execute( command, driver, browser, output_path )
-    BrowserShooter::Logger.log "command: #{command}"
-
-    if( command.split[0].strip == "shot" )
-      sufix = command.split[1] ? command.split[1].strip : nil
-
-      BrowserShooter::Commander.shot(
-        driver,
-        output_path,
-        sufix
-      )
-
-    elsif( command.split[0].strip == "shot_system" )
-      sufix = command.split[1] ? command.split[1].strip : nil
-
-      BrowserShooter::Commander.shot_system(
-        driver,
-        browser,
-        output_path,
-        sufix
-      )
-
-    elsif( command.split[0].strip == "pause" )
-      BrowserShooter::Commander.pause( command.split[1].strip.to_i )
-
-    elsif( command.split[0].strip == "wait_for_element" )
-      params = command.match /wait_for_element "(.*)"\s?,\s?(\d*)/
-
-      BrowserShooter::Commander.wait_for_element(
-        driver,
-        params[1],
-        params[2].to_i
-      )
-
-    elsif( command.split[0].strip == "type" )
-      params = command.match /type "(.*)"\s?,\s?"(.*)"/
-
-      BrowserShooter::Commander.type(
-        driver,
-        params[1],
-        params[2]
-      )
-
-    elsif( command.split[0].strip == "click" )
-      params = command.match /click "(.*)"/
-      BrowserShooter::Commander.click(
-        driver,
-        params[1]
-      )
-
-    else
-      eval "driver.#{command}"
-
-    end
-  end
-
-  def self.wrapper_execute( command, driver, browser, output_path )
+  def self.wrapper_execute( command_executor, command )
     result = {
       :time     => Time.now.to_i,
       :command  => command
@@ -86,10 +36,8 @@ module BrowserShooter::Commander
     begin
       message =
         BrowserShooter::Commander.execute(
-          command,
-          driver,
-          browser,
-          output_path
+          command_executor,
+          command
         )
 
 
@@ -114,60 +62,15 @@ module BrowserShooter::Commander
     return result
   end
 
-  def self.shot( driver, output_path, sufix = nil )
-    sufix     = timestamp unless sufix
-    shot_path = "#{output_path}/shots/#{sufix}.png"
+  def self.execute( command_executor, command )
+    BrowserShooter::Logger.log "command: #{command}"
+    command_name = command.split( /[\s\(]/ )[0].strip
 
-    BrowserShooter::Logger.log "shooting in '#{shot_path}'"
-
-    FileUtils.mkdir_p( File.dirname( shot_path ) )
-    driver.save_screenshot( shot_path )
-
-    return shot_path
-  end
-
-  def self.shot_system( driver, browser, output_path, sufix = nil )
-    sufix     = timestamp unless sufix
-    shot_path = "#{output_path}/shots/#{sufix}.png"
-
-    BrowserShooter::Logger.log "shooting system in '#{shot_path}'"
-
-    FileUtils.mkdir_p( File.dirname( shot_path ) )
-
-    command = "VBoxManage controlvm '#{browser.vm}' screenshotpng '#{shot_path}'"
-    success = Kernel.system( command )
-
-    if( !success )
-      raise SystemCallError, "Shoot system command [#{command}] returns error: '#{$?}'"
-    end
-
-    return shot_path
-  end
-
-  def self.wait_for_element( driver, css_selector, timeout )
-    wait = Selenium::WebDriver::Wait.new( :timeout => timeout )
-
-    wait.until do
-      driver.find_element( "css", css_selector )
+    if( command_executor.respond_to?( command_name.to_sym ) )
+      eval "command_executor.#{command}"
+    else
+      eval "command_executor.driver.#{command}"
     end
   end
 
-  def self.click( driver, css_selector )
-    driver.find_element( "css", css_selector ).click
-  end
-
-  def self.type( driver, css_selector, text )
-    driver.find_element( "css", css_selector ).send_keys( text )
-  end
-
-  def self.pause( seconds )
-    BrowserShooter::Logger.log "pausing #{seconds} seconds"
-    Kernel.sleep seconds
-
-    return "#{seconds} seconds later..."
-  end
-
-  def self.timestamp
-    Time.now.to_i
-  end
 end

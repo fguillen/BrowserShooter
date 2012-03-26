@@ -3,13 +3,13 @@ output_path: "~/browser_shoots"
 tests:
   google: |
     navigate.to "http://www.google.de"
-    shot before
+    shot "before"
     type "input[name='q']", "beautiful houses"
     click "input[name='btnG']"
     pause 3
     click "a.kls"
     pause 3
-    shot after
+    shot "after"
 
   miniclip: |
     navigate.to "http://www.miniclip.com/games/de/"

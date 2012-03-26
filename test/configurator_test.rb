@@ -2,21 +2,28 @@ require_relative "test_helper"
 
 class ConfiguratorTest < Test::Unit::TestCase
   def test_initialize
-    opts    = { :config_file => "config_file" }
-    config  = { :key1 => "value1" }
+    opts = {
+      :config_file  => "config_file",
+    }
+
+    config = {
+      "key1"         => "value1",
+      "extensions"   => [ "extension1.rb", "extension2.rb" ]
+    }
 
     BrowserShooter::Configurator.expects( :load_config ).with( "config_file" ).returns( config )
     BrowserShooter::Configurator.expects( :build_models ).with( config ).returns( "models" )
     BrowserShooter::Configurator.expects( :filter_suites ).with( "models", opts ).returns( "suites" )
+    BrowserShooter::Configurator.expects( :load_extensions ).with( ["extension1.rb", "extension2.rb"] )
 
     configurator = BrowserShooter::Configurator.new( opts )
 
-    assert_equal( "value1", configurator[:key1] )
+    assert_equal( "value1", configurator["key1"] )
     assert_equal( "suites", configurator.suites )
   end
 
   def test_build_models
-    BrowserShooter::Configurator.stubs( :set_up_output_path )
+    BrowserShooter::Configurator.stubs( :setup_output_path )
     config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config.yml" )
     models = BrowserShooter::Configurator.build_models( config )
 
@@ -40,7 +47,7 @@ class ConfiguratorTest < Test::Unit::TestCase
   end
 
   def test_filter_suites
-    BrowserShooter::Configurator.stubs( :set_up_output_path )
+    BrowserShooter::Configurator.stubs( :setup_output_path )
     config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config.yml" )
     models = BrowserShooter::Configurator.build_models( config )
 
@@ -79,5 +86,11 @@ class ConfiguratorTest < Test::Unit::TestCase
     assert_equal( "/output_path/timestamp", config["output_path"] )
     assert_equal( "script-one", config["scripts"]["script-one"] )
     assert_equal( "browser-one", config["browsers"]["browser-one"] )
+  end
+
+  def test_load_extensions
+    Kernel.expects( :require ).with( File.expand_path( "extension1.rb" ) )
+    Kernel.expects( :require ).with( File.expand_path( "extension2.rb" ) )
+    BrowserShooter::Configurator.load_extensions( ["extension1.rb", "extension2.rb"] )
   end
 end

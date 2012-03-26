@@ -16,7 +16,7 @@ class BaseTest < Test::Unit::TestCase
   end
 
   def test_run
-    BrowserShooter::Configurator.stubs( :set_up_output_path )
+    BrowserShooter::Configurator.stubs( :setup_output_path )
 
     opts = {}
 

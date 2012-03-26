@@ -38,18 +38,21 @@ Create a YAML file like this:
 
     # myconfig.yml
     output_path: "/tmp/shoots"
+    extensions:
+      - ~/browser_shooter/my_extension_1.rb
+      - ~/browser_shooter/my_extension_2.rb
 
     tests:
       google: |
         navigate.to "http://www.google.de"
-        shot before
+        shot "before"
         type "input[name='q']", "beautiful houses"
         click "input[name='btnG']"
         pause 3
         click "a.kls"
         pause 3
-        shot after
-        shot_system final_shot
+        shot "after"
+        shot_system "final_shot"
 
       miniclip: |
         navigate.to "http://www.miniclip.com/games/de/"
@@ -86,16 +89,64 @@ Look in the [examples folder](https://github.com/fguillen/BrowserShooter/tree/ma
 
 ##### Tests section
 
-Commands are WebDriver commands, except:
+###### WebDriver commands
 
-* **shot** command which receive an optional param with the 'sufix' of the page screenshot png
-* **shot_system** equal to 'shot' but use the "VirtualBox" system command "VBoxManage" to make an screenshot of the OS screen.
-* **pause** command which use a Ruby 'sleep' command to pause
-* **click** command which receive a 'css_selector' as a param, find the element and click on it
-* **type** command which receive two params: 'css_selector' ana a 'message', find the element and type the message on it
-* **wait_for_element** command which receive two params: 'css_selector', and a 'timeout' in seconds
+You can use any command from the [WebDriver API](http://selenium.googlecode.com/svn/trunk/docs/api/rb/index.html).
+
+Any command you can call from a `driver` instance like:
+
+    driver.navigate.to "http://google.com"
+
+You can use in the _test section_ just removing the `driver` word:
+
+    navigate.to "http://google.com"
+
+###### Extended Commands
+
+Also you can use this list of _extended commands_:
+
+* **shot**              receives an optional param with the 'sufix' of the page screenshot png
+* **shot_system**       equal to 'shot' but uses the "VirtualBox" system command "VBoxManage" to make an screenshot of the OS screen.
+* **pause**             uses a Ruby 'sleep' command to pause
+* **click**             receives a 'css_selector' as a param, find the element and click on it
+* **type**              receives two params: 'css_selector' ana a 'message', find the element and type the message on it
+* **wait_for_element**  receives two params: 'css_selector', and a 'timeout' in seconds
+* **try**               receives an string wich is Ruby code, you have access here to variables like `driver`, `browser` and `output_path`.
+* **debug**             receives no argument. When the test arrives to this command a Ruby console will be open and you will be able to write Ruby commands on the air. Until you write `exit`.
 
 You can define as much tests as you want. Every test is composed by a list of **one line** commands.
+
+###### Custom Extended Commands
+
+If you need to add new commands to the _test section_ you can implement your own ones.
+
+Write a file like this:
+
+    # my_extension.rb
+    module MyExtension
+      def log( arg1, arg2 )
+        puts "This is the log extension method"
+        puts "arg1: #{arg1}"
+        puts "arg2: #{arg2}"
+        puts "driver: #{driver}"
+        puts "browser: #{browser}"
+        puts "output_path: #{output_path}"
+      end
+    end
+    BrowserShooter::Commands::Base.plug( MyExtension )
+
+Declare this extension file in the _extensions section_:
+
+    # config.yml
+    extensions:
+      - path/to/my_extension.rb
+
+Then you will be able to use this new command into the _test section_ like this:
+
+    log "myarg1", "myarg2"
+
+You can check the [custom extensions](custom_extensions) that are already integrated in BrowserShooter.
+
 
 ##### Browsers section
 
