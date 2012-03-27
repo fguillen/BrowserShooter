@@ -167,15 +167,19 @@ Groups of **tests** and **browsers** to be executed as one.
 
 ##### Choosing a suite
 
-    $ browser_shooter --config ./my/config.yml -s --suite suite1
+    $ browser_shooter --config ./my/config.yml --suite suite1
 
 ##### Choosing a test
 
-    $ browser_shooter --config ./my/config.yml -s --test google
+    $ browser_shooter --config ./my/config.yml --test google
 
 ##### Choosing a test an a list of browsers
 
-    $ browser_shooter --config ./my/config.yml -s --test google --browsers windows-firefox,windows-iexplore
+    $ browser_shooter --config ./my/config.yml --test google --browsers windows-firefox,windows-iexplore
+
+##### Verbose
+
+    $ browser_shooter --config ./my/config.yml --verbose
 
 ##### Check all the options
 
