@@ -145,7 +145,7 @@ Then you will be able to use this new command into the _test section_ like this:
 
     log "myarg1", "myarg2"
 
-You can check the [custom extensions](custom_extensions) that are already integrated in BrowserShooter.
+You can check the [custom extensions](https://github.com/fguillen/BrowserShooter/tree/master/lib/browser_shooter/commands) that are already integrated in BrowserShooter.
 
 
 ##### Browsers section
