@@ -45,6 +45,8 @@ module BrowserShooter
             :desired_capabilities => browser.type.to_sym
           )
 
+        driver.manage.timeouts.implicit_wait = 40
+
         logs =
           BrowserShooter::Commander.script(
             test.commands,
