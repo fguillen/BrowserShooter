@@ -20,7 +20,7 @@ module BrowserShooter
               suite,
               test,
               browser,
-              config["output_path"]
+              config
             )
           end
         end
@@ -31,9 +31,9 @@ module BrowserShooter
       BrowserShooter::Logger.log( "BYE!" )
     end
 
-    def self.run_test( suite, test, browser, output_path )
+    def self.run_test( suite, test, browser, config )
       BrowserShooter::Logger.log( "Executing #{suite.name} | #{test.name} | #{browser.name}", true )
-      output_path = "#{output_path}/#{suite.name}/#{test.name}/#{browser.name}"
+      output_path = "#{config["output_path"]}/#{suite.name}/#{test.name}/#{browser.name}"
 
       driver = nil
 
@@ -45,7 +45,7 @@ module BrowserShooter
             :desired_capabilities => browser.type.to_sym
           )
 
-        driver.manage.timeouts.implicit_wait = 40
+        driver.manage.timeouts.implicit_wait = config["timeout"]
 
         logs =
           BrowserShooter::Commander.script(

@@ -55,6 +55,13 @@ class ConfiguratorTest < Test::Unit::TestCase
     suites = BrowserShooter::Configurator.filter_suites( models, opts )
     assert_equal( 2, suites.size )
 
+    opts = { :suite => "suite1" }
+    suites = BrowserShooter::Configurator.filter_suites( models, opts )
+    assert_equal( 1, suites.size )
+    assert_equal( 2, suites.first.tests.size )
+    assert_equal( "google", suites.first.tests.first.name )
+    assert_equal( "miniclip", suites.first.tests.last.name )
+
     opts = { :suite => "suite2" }
     suites = BrowserShooter::Configurator.filter_suites( models, opts )
     assert_equal( 1, suites.size )
@@ -84,8 +91,18 @@ class ConfiguratorTest < Test::Unit::TestCase
     config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config_simple.yml" )
 
     assert_equal( "/output_path/timestamp", config["output_path"] )
-    assert_equal( "script-one", config["scripts"]["script-one"] )
+    assert_equal( 20, config["timeout"] )
+    assert_equal( "script-one", config["tests"]["script-one"] )
     assert_equal( "browser-one", config["browsers"]["browser-one"] )
+  end
+
+  def test_load_config_with_defaults
+    BrowserShooter::Configurator.expects( :timestamp ).returns( "timestamp" )
+
+    config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config_empty.yml" )
+
+    assert_equal( File.expand_path( "~/browser_shooter/timestamp" ), config["output_path"] )
+    assert_equal( 40, config["timeout"] )
   end
 
   def test_load_extensions

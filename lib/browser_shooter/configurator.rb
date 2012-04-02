@@ -79,7 +79,8 @@ module BrowserShooter
 
     def self.load_config( config_file_path )
       config = {
-        "output_path" => "~/browser_shooter"
+        "output_path" => "~/browser_shooter",
+        "timeout"    => 40
       }
 
       config.merge! YAML.load_file( config_file_path )

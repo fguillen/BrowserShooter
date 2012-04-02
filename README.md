@@ -37,7 +37,8 @@ Repeat these steps in every VM.
 Create a YAML file like this:
 
     # myconfig.yml
-    output_path: "/tmp/shoots"
+    output_path: "~/browser_shooter"
+    timeout: 40
     extensions:
       - ~/browser_shooter/my_extension_1.rb
       - ~/browser_shooter/my_extension_2.rb
@@ -86,6 +87,12 @@ Create a YAML file like this:
 
 
 Look in the [examples folder](https://github.com/fguillen/BrowserShooter/tree/master/examples) for more complete examples.
+
+##### Root section
+
+* **output_path**:  Root folder for the _logs_ and _screenshots_. Optional, showing the default value.
+* **timeout**:      WebDriver global timeout for all commands. Optional. showing the default value.
+* **extensions**:   List of files with _Custom Extended Commands_ implementations. Optional, empty is default. Please check the section _Custom Extended Commands_ for more information.
 
 ##### Tests section
 
