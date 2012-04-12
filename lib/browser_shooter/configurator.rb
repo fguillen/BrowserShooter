@@ -25,9 +25,35 @@ module BrowserShooter
 
       config.merge! YAML.load_file( config_file_path )
 
-      config["output_path"] = setup_output_path( config["output_path"] )
+      config["output_path"]       = setup_output_path( config["output_path"] )
+      config["config_root_path"]  = File.dirname( config_file_path )
+
+      # _tests_ key is a folder path for external test files
+      if( config["tests"].is_a?( String ) )
+        config["tests"] = BrowserShooter::Configurator.load_external_tests( config )
+      end
 
       config
+    end
+
+    # If the _tests_ key in the _config.yml_ is an string
+    # we load of the files in this path as _tests_ and add
+    # them to the original config.
+    def self.load_external_tests( config )
+      tests_path = File.join( config["config_root_path"], config["tests"] )
+
+      BrowserShooter::Logger.log( "Loading external tests: #{tests_path}" )
+
+      raise ArgumentError, "External tests dir path doesn't exist: 'tests_path'" if !File.exists?( tests_path )
+
+      tests = {}
+
+      Dir.glob( "#{tests_path}/*.test" ).each do |test_path|
+        test_name = File.basename( test_path, ".test" )
+        tests[ test_name ] = File.read( test_path )
+      end
+
+      return tests
     end
 
     # Creates the _tests_, _browsers_ and _suites_ arrays.

@@ -46,6 +46,45 @@ class ConfiguratorTest < Test::Unit::TestCase
     assert_equal( models[:browsers].first, models[:suites].first.browsers.first )
   end
 
+  def test_build_models_from_external_tests
+    BrowserShooter::Configurator.stubs( :setup_output_path )
+    config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config_with_external_tests.yml" )
+    models = BrowserShooter::Configurator.build_models( config )
+
+    assert_equal( 2, models[:tests].size )
+    assert_equal( "google", models[:tests].first.name )
+    assert_equal( 2, models[:tests].first.commands.size )
+    assert_equal( "google command1", models[:tests].first.commands.first )
+  end
+
+  def test_load_external_tests
+    BrowserShooter::Configurator.stubs( :setup_output_path )
+    config = {
+      "tests"             => "./external_tests",
+      "config_root_path"  => "#{File.dirname(__FILE__)}/fixtures/"
+    }
+
+    tests = BrowserShooter::Configurator.load_external_tests( config )
+
+    assert_equal( 2, tests.size )
+    assert_equal( "google", tests.keys.first )
+    assert_equal( "google command1\ngoogle command2", tests.values.first )
+    assert_equal( "miniclip", tests.keys.last )
+    assert_equal( "miniclip command1\nminiclip command2", tests.values.last )
+  end
+
+  def test_load_external_tests_error_if_path_doesnot_exist
+    BrowserShooter::Configurator.stubs( :setup_output_path )
+    config = {
+      "tests"             => "./no/exists",
+      "config_root_path"  => "#{File.dirname(__FILE__)}/fixtures/"
+    }
+
+    assert_raise( ArgumentError ) do
+      BrowserShooter::Configurator.load_external_tests( config )
+    end
+  end
+
   def test_filter_suites
     BrowserShooter::Configurator.stubs( :setup_output_path )
     config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config.yml" )

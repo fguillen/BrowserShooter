@@ -1,0 +1,14 @@
+tests: "./external_tests"
+
+browsers:
+  windows-firefox:
+    url: "http://10.211.55.4:4444/wd/hub"
+    type: "firefox"
+
+suites:
+  suite1:
+    tests:
+     - google
+     - miniclip
+    browsers:
+     - windows-firefox

@@ -1,0 +1,8 @@
+navigate.to "http://www.google.de"
+shot "before"
+type "input[name='q']", "beautiful houses"
+click "input[name='btnG']"
+pause 3
+click "a.kls"
+pause 3
+shot "after"

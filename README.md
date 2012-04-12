@@ -154,6 +154,26 @@ Then you will be able to use this new command into the _test section_ like this:
 
 You can check the [custom extensions](https://github.com/fguillen/BrowserShooter/tree/master/lib/browser_shooter/commands) that are already integrated in BrowserShooter.
 
+###### External test files
+
+Instead of defining all the tests in this file you can create a folder and create **a file for each tests**.
+
+These files have to have the _.test_ extension.
+
+Then you use the _test_ key on the _config.yml_ file to indicate the **path to the external test files folder**.
+
+If you have this file tree:
+
+    /config.yml
+    /external_tests/test1.test
+    /external_tests/test2.test
+
+Like this:
+
+    tests: "./external_tests"
+
+The path is **relative to the _config.yml_ file path**.
+
 
 ##### Browsers section
 
