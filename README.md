@@ -174,6 +174,9 @@ Like this:
 
 The path is **relative to the _config.yml_ file path**.
 
+The **name of the test** will be the name of the File. Use it in your _suite_ definition.
+
+
 
 ##### Browsers section
 
