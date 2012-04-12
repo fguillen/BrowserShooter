@@ -156,27 +156,27 @@ You can check the [custom extensions](https://github.com/fguillen/BrowserShooter
 
 ###### External test files
 
-Instead of defining all the tests in this file you can create a folder and create **a file for each tests**.
+Instead of defining all the tests in this file you can create a folder and create **a File for each Tests**.
 
-These files have to have the _.test_ extension.
+These files have to have the **_.test_ extension**.
 
-Then you use the _test_ key on the _config.yml_ file to indicate the **path to the external test files folder**.
+Then you use the _tests_ key on the _config.yml_ file to indicate the **path to the external test files folder**.
 
-If you have this file tree:
+For example, if you have this file tree:
 
     /config.yml
     /external_tests/test1.test
     /external_tests/test2.test
 
-Like this:
+Then you have to use this configuration:
 
     tests: "./external_tests"
 
 The path is **relative to the _config.yml_ file path**.
 
-The **name of the test** will be the name of the File. Use it in your _suite_ definition.
+The name of the Test will be **the name of the File**. Use it in your _suite_ definition.
 
-
+Check the [config with external test](https://github.com/fguillen/BrowserShooter/blob/master/examples/config_with_external_tests.yml) example.
 
 ##### Browsers section
 
