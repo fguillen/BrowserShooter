@@ -1,4 +1,5 @@
 output_path: "~/browser_shoots"
+timeout: 5
 
 tests: "./external_tests"
 
