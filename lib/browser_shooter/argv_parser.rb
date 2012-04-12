@@ -1,3 +1,4 @@
+# Parse all the _shell commands params_
 module BrowserShooter
   class ARGVParsers
     include Mixlib::CLI

@@ -85,6 +85,27 @@ class ConfiguratorTest < Test::Unit::TestCase
     assert_equal( "windows-firefox", suites.first.browsers.first.name )
   end
 
+  def test_filter_suites_with_error
+    BrowserShooter::Configurator.stubs( :setup_output_path )
+    config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config.yml" )
+    models = BrowserShooter::Configurator.build_models( config )
+
+    opts = { :suite => "not_exists" }
+    assert_raise( ArgumentError ) do
+      BrowserShooter::Configurator.filter_suites( models, opts )
+    end
+
+    opts = { :test => "not_exists" }
+    assert_raise( ArgumentError ) do
+      BrowserShooter::Configurator.filter_suites( models, opts )
+    end
+
+    opts = { :test => "google", :browsers => ["not_exists"] }
+    assert_raise( ArgumentError ) do
+      BrowserShooter::Configurator.filter_suites( models, opts )
+    end
+  end
+
   def test_load_config
     BrowserShooter::Utils.expects( :timestamp ).returns( "timestamp" )
 

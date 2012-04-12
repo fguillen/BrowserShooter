@@ -6,6 +6,7 @@ module BrowserShooter
       @opts = opts
     end
 
+    # Main method. Loads the configuration, filter the suites, runs the tests and exports the logs.
     def run
       BrowserShooter::Logger.verbose = opts[:verbose]
       BrowserShooter::Logger.log( "Starting script running with version #{BrowserShooter::VERSION}..." )
@@ -31,6 +32,7 @@ module BrowserShooter
       BrowserShooter::Logger.log( "BYE!" )
     end
 
+    # Runs a single test with all its _commands_ in an specific _browser_
     def self.run_test( suite, test, browser, config )
       BrowserShooter::Logger.log( "Executing #{suite.name} | #{test.name} | #{browser.name}", true )
       output_path = "#{config["output_path"]}/#{suite.name}/#{test.name}/#{browser.name}"

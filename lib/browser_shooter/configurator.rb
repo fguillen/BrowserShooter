@@ -2,6 +2,7 @@ module BrowserShooter
   class Configurator
     attr_reader :suites
 
+    # Takes the digested command options and create and filter the models
     def initialize( opts )
       @config = BrowserShooter::Configurator.load_config( opts[:config_file] )
       models  = BrowserShooter::Configurator.build_models( @config )
@@ -10,10 +11,12 @@ module BrowserShooter
       BrowserShooter::Configurator.load_extensions( @config["extensions"] ) if @config["extensions"]
     end
 
+    # The hash version of the _config.yml_ is available here
     def [](value)
       @config[value]
     end
 
+    # Load the _config.yml_ file and return it in a Hash format
     def self.load_config( config_file_path )
       config = {
         "output_path" => "~/browser_shooter",
@@ -27,6 +30,7 @@ module BrowserShooter
       config
     end
 
+    # Creates the _tests_, _browsers_ and _suites_ arrays.
     def self.build_models( config )
       tests =
         config["tests"].map do |name, commands|
@@ -42,8 +46,8 @@ module BrowserShooter
 
       suites =
         config["suites"].map do |name, opts|
-          suite_tests    = opts["tests"].map { |test_name| tests.select { |test| test.name == test_name } }.flatten.compact
-          suite_browsers = opts["browsers"].map { |browser_name| browsers.select { |browser| browser.name == browser_name } }.flatten.compact
+          suite_tests    = BrowserShooter::Utils.find_by_names( tests, opts["tests"] )
+          suite_browsers = BrowserShooter::Utils.find_by_names( browsers, opts["browsers"] )
 
           BrowserShooter::Models::Suite.new( name, suite_tests, suite_browsers )
         end
@@ -55,35 +59,32 @@ module BrowserShooter
       }
     end
 
+    # If special _filter_ options has been defined in the _command options_ the _suites_ are filtered
+    # to only play with the filtered ones.
     def self.filter_suites( models, opts )
       suites = []
 
       if( opts[:suite] )
-        suite  = models[:suites].select{ |e| e.name == opts[:suite] }.first
-        raise ArgumentError, "Not suite found '#{opts[:suite]}'" if suite.nil?
+        suite = BrowserShooter::Utils.find_by_name( models[:suites], opts[:suite] )
 
         suites = [suite]
 
       elsif( opts[:test] && opts[:browsers] )
-        test      = models[:tests].select{ |e| e.name == opts[:test] }.first
-        raise ArgumentError, "Not test found '#{opts[:test]}'" if test.nil?
-
-        browsers  = models[:browsers].select{ |e| opts[:browsers].include? e.name }
-        raise ArgumentError, "Not browsers found '#{opts[:browsers].join( "," )}'" if browsers.empty?
-
+        test      = BrowserShooter::Utils.find_by_name( models[:tests], opts[:test] )
+        browsers  = BrowserShooter::Utils.find_by_names( models[:browsers], opts[:browsers] )
         suite     = BrowserShooter::Models::Suite.new( "anonymous", [test], browsers )
-        suites    = [suite]
+
+        suites = [suite]
 
       elsif( opts[:test] )
-        test      = models[:tests].select{ |e| e.name == opts[:test] }.first
-        raise ArgumentError, "Not test found '#{opts[:test]}'" if test.nil?
-
+        test      = BrowserShooter::Utils.find_by_name( models[:tests], opts[:test] )
         browsers  = models[:browsers]
         suite     = BrowserShooter::Models::Suite.new( "anonymous", [test], browsers )
-        suites    = [suite]
+
+        suites = [suite]
 
       else
-        suites    = models[:suites]
+        suites = models[:suites]
 
       end
 

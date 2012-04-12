@@ -1,5 +1,14 @@
 module BrowserShooter::Commander
 
+  # Executes a test _script_ with all _its_ commands.
+  #
+  # Returns: the test result in this format:
+  #     {
+  #       :time => (the actual time),
+  #       :success => (true|false),
+  #       :command => (the actual command),
+  #       :message => (the command message or error message),
+  #     }
   def self.script( commands, driver, browser, output_path )
     command_executor =
       BrowserShooter::Commands::Base.new(
