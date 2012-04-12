@@ -14,6 +14,47 @@ module BrowserShooter
       @config[value]
     end
 
+    def self.load_config( config_file_path )
+      config = {
+        "output_path" => "~/browser_shooter",
+        "timeout"    => 40
+      }
+
+      config.merge! YAML.load_file( config_file_path )
+
+      config["output_path"] = setup_output_path( config["output_path"] )
+
+      config
+    end
+
+    def self.build_models( config )
+      tests =
+        config["tests"].map do |name, commands|
+          test_commands = commands.split( "\n" )
+
+          BrowserShooter::Models::Test.new( name, test_commands )
+        end
+
+      browsers =
+        config["browsers"].map do |name, opts|
+          BrowserShooter::Models::Browser.new( name, opts["url"], opts["type"], opts["vm"] )
+        end
+
+      suites =
+        config["suites"].map do |name, opts|
+          suite_tests    = opts["tests"].map { |test_name| tests.select { |test| test.name == test_name } }.flatten.compact
+          suite_browsers = opts["browsers"].map { |browser_name| browsers.select { |browser| browser.name == browser_name } }.flatten.compact
+
+          BrowserShooter::Models::Suite.new( name, suite_tests, suite_browsers )
+        end
+
+      {
+        :tests    => tests,
+        :browsers => browsers,
+        :suites   => suites
+      }
+    end
+
     def self.filter_suites( models, opts )
       suites = []
 
@@ -47,47 +88,6 @@ module BrowserShooter
       end
 
       suites
-    end
-
-    def self.build_models( config )
-      tests =
-        config["tests"].map do |name, commands|
-          test_commands = commands.split( "\n" )
-
-          BrowserShooter::Models::Test.new( name, test_commands )
-        end
-
-      browsers =
-        config["browsers"].map do |name, opts|
-          BrowserShooter::Models::Browser.new( name, opts["url"], opts["type"], opts["vm"] )
-        end
-
-      suites =
-        config["suites"].map do |name, opts|
-          suite_tests    = tests.select{ |e| opts["tests"].include? e.name }
-          suite_browsers = browsers.select{ |e| opts["browsers"].include? e.name }
-
-          BrowserShooter::Models::Suite.new( name, suite_tests, suite_browsers )
-        end
-
-      {
-        :tests    => tests,
-        :browsers => browsers,
-        :suites   => suites
-      }
-    end
-
-    def self.load_config( config_file_path )
-      config = {
-        "output_path" => "~/browser_shooter",
-        "timeout"    => 40
-      }
-
-      config.merge! YAML.load_file( config_file_path )
-
-      config["output_path"] = setup_output_path( config["output_path"] )
-
-      config
     end
 
     def self.setup_output_path( output_path )

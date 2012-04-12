@@ -1,0 +1,21 @@
+tests:
+  test1: commands
+  test2: commands
+
+browsers:
+  browser1:
+    url: "http://10.211.55.4:4444/wd/hub"
+    type: "firefox"
+
+  browser2:
+    url: "http://10.211.55.4:4444/wd/hub"
+    type: "iexploreproxy"
+
+suites:
+  suite1:
+    tests:
+      - test2
+      - test1
+    browsers:
+      - browser2
+      - browser1

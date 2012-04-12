@@ -110,4 +110,22 @@ class ConfiguratorTest < Test::Unit::TestCase
     Kernel.expects( :require ).with( File.expand_path( "extension2.rb" ) )
     BrowserShooter::Configurator.load_extensions( ["extension1.rb", "extension2.rb"] )
   end
+
+  def test_suite_tests_in_order
+    BrowserShooter::Configurator.stubs( :setup_output_path )
+    config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config_in_order.yml" )
+    models = BrowserShooter::Configurator.build_models( config )
+
+    assert_equal( 2, models[:suites].first.tests.size )
+    assert_equal( "test2", models[:suites].first.tests.first.name )
+  end
+
+  def test_suite_browsers_in_order
+    BrowserShooter::Configurator.stubs( :setup_output_path )
+    config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config_in_order.yml" )
+    models = BrowserShooter::Configurator.build_models( config )
+
+    assert_equal( 2, models[:suites].first.browsers.size )
+    assert_equal( "browser2", models[:suites].first.browsers.first.name )
+  end
 end
