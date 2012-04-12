@@ -86,7 +86,7 @@ class ConfiguratorTest < Test::Unit::TestCase
   end
 
   def test_load_config
-    BrowserShooter::Configurator.expects( :timestamp ).returns( "timestamp" )
+    BrowserShooter::Utils.expects( :timestamp ).returns( "timestamp" )
 
     config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config_simple.yml" )
 
@@ -97,7 +97,7 @@ class ConfiguratorTest < Test::Unit::TestCase
   end
 
   def test_load_config_with_defaults
-    BrowserShooter::Configurator.expects( :timestamp ).returns( "timestamp" )
+    BrowserShooter::Utils.expects( :timestamp ).returns( "timestamp" )
 
     config = BrowserShooter::Configurator.load_config( "#{FIXTURES}/config_empty.yml" )
 

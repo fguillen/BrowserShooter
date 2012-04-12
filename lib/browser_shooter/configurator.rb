@@ -91,7 +91,7 @@ module BrowserShooter
     end
 
     def self.setup_output_path( output_path )
-      output_path = File.expand_path( "#{output_path}/#{timestamp}" )
+      output_path = File.expand_path( "#{output_path}/#{BrowserShooter::Utils.timestamp}" )
       BrowserShooter::Logger.log( "output_path: #{output_path}" )
 
       output_path
@@ -105,8 +105,5 @@ module BrowserShooter
       end
     end
 
-    def self.timestamp
-      Time.now.strftime("%Y%m%d%H%M%S")
-    end
   end
 end

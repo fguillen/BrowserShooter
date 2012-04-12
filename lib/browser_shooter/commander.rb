@@ -1,7 +1,6 @@
 module BrowserShooter::Commander
 
   def self.script( commands, driver, browser, output_path )
-
     command_executor =
       BrowserShooter::Commands::Base.new(
         driver,
